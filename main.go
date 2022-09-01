@@ -7,22 +7,15 @@ import (
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
+	handlers "github.com/holy-tech/discord-roulette/handlers"
 )
-
-func Ready(session *discordgo.Session, event *discordgo.Ready) {
-	session.UpdateGameStatus(0, "!roulette")
-}
-
-func Salute(session *discordgo.Session, event *discordgo.MessageCreate) {
-	fmt.Println(event.Message)
-}
 
 func main() {
 	discord, _ := discordgo.New("Bot " + os.Getenv("DISCORD_TOKEN"))
 
-	discord.AddHandler(Ready)
+	discord.AddHandler(handlers.Ready)
 	fmt.Println("Ready")
-	discord.AddHandler(Salute)
+	discord.AddHandler(handlers.Salute)
 	fmt.Println("Salute")
 
 	err := discord.Open()
