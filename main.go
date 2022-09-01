@@ -14,9 +14,7 @@ func main() {
 	discord, _ := discordgo.New("Bot " + os.Getenv("DISCORD_TOKEN"))
 
 	discord.AddHandler(handlers.Ready)
-	fmt.Println("Ready")
 	discord.AddHandler(handlers.Salute)
-	fmt.Println("Salute")
 
 	err := discord.Open()
 	defer discord.Close()
@@ -28,8 +26,5 @@ func main() {
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
-
-	fmt.Println("Dying")
-
 	return
 }
