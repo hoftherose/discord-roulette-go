@@ -7,7 +7,7 @@ import (
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
-	handlers "github.com/holy-tech/discord-roulette/src"
+	handlers "github.com/holy-tech/discord-roulette/src/handlers"
 )
 
 func main() {

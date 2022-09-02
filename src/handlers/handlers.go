@@ -1,14 +1,16 @@
 package handlers
 
 import (
+	"flag"
 	"log"
+	"os"
 
 	"github.com/bwmarrin/discordgo"
 )
 
 var (
 	readyStatus = "/roulette"
-	// GuildID        = flag.String("guild", "", os.Getenv("GUILD_ID"))
+	guildID     = flag.String("guild", "", os.Getenv("GUILD_ID"))
 )
 
 func Ready(session *discordgo.Session, event *discordgo.Ready) {
