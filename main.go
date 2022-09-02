@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -11,20 +11,21 @@ import (
 )
 
 func main() {
-	discord, _ := discordgo.New("Bot " + os.Getenv("DISCORD_TOKEN"))
+	discord, err := discordgo.New("Bot " + os.Getenv("DISCORD_TOKEN"))
+	if err != nil {
+		log.Fatalf("Invalid paramters: %v", err)
+	}
 
 	discord.AddHandler(handlers.Ready)
-	discord.AddHandler(handlers.Salute)
 
-	err := discord.Open()
-	defer discord.Close()
-	if err != nil {
-		fmt.Println(err)
-		return
+	if err := discord.Open(); err != nil {
+		log.Fatalf("Could not open session: %v", err)
 	}
+	defer discord.Close()
+
+	handlers.AppendHandler(discord, &handlers.RouletteHandle)
 
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
-	return
 }

@@ -1,30 +1,26 @@
 package handlers
 
 import (
-	"fmt"
-	"strings"
+	"flag"
+	"log"
 
 	"github.com/bwmarrin/discordgo"
 )
 
-const COMMAND_STRING = "!roulette"
+var (
+	COMMAND_STRING = "!roulette"
+	// AppID          = flag.String("app", "", os.Getenv("APP_ID"))
+	// GuildID        = flag.String("guild", "", os.Getenv("GUILD_ID"))
+)
 
 func Ready(session *discordgo.Session, event *discordgo.Ready) {
 	session.UpdateGameStatus(0, COMMAND_STRING)
 }
 
-func Salute(session *discordgo.Session, m *discordgo.MessageCreate) {
-	if strings.HasPrefix(m.Content, COMMAND_STRING) {
-
-		// Find the channel that the message came from.
-		c, err := session.State.Channel(m.ChannelID)
-		if err != nil {
-			return
-		}
-		if c.Name == "roulette-table" {
-			session.ChannelMessageSend(c.ID, fmt.Sprintf("You don't fear death... Type %s while in a voice channel to play a sound.", COMMAND_STRING))
-		}
-
-		fmt.Println("You are doing stuff in channel", c)
+func AppendHandler(s *discordgo.Session, h *Handler) {
+	s.AddHandler(h.commandHandler)
+	_, err := s.ApplicationCommandCreate(h.commandSpecs.ApplicationID, h.commandSpecs.GuildID, h.commandSpecs)
+	if err != nil {
+		log.Fatalf("Application command failed to load: %v", err)
 	}
 }
