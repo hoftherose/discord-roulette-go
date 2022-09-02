@@ -7,7 +7,7 @@ import (
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
-	handlers "github.com/holy-tech/discord-roulette/src/handlers"
+	h "github.com/holy-tech/discord-roulette/src/handlers"
 )
 
 func main() {
@@ -16,7 +16,7 @@ func main() {
 		log.Fatalf("Invalid paramters: %v", err)
 	}
 
-	discord.AddHandler(handlers.Ready)
+	discord.AddHandler(h.Ready)
 	discord.AddHandler(func(s *discordgo.Session, r *discordgo.Ready) {
 		log.Printf("Logged in as: %v#%v", s.State.User.Username, s.State.User.Discriminator)
 	})
@@ -26,7 +26,7 @@ func main() {
 	}
 	defer discord.Close()
 
-	handlers.AppendHandler(discord, &handlers.RouletteHandle)
+	h.AppendHandler(discord, &h.RouletteHandle)
 
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)

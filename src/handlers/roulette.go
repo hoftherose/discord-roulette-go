@@ -4,13 +4,13 @@ import (
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
-	roulette "github.com/holy-tech/discord-roulette/src/roulette"
+	r "github.com/holy-tech/discord-roulette/src/roulette"
 )
 
 var defaultAdmin int64 = discordgo.PermissionAdministrator
 
-func getSettingsFromOptions(options []*discordgo.ApplicationCommandInteractionDataOption) roulette.GameSettings {
-	settings := roulette.GameSettings(roulette.DefaultGameSettings)
+func getSettingsFromOptions(options []*discordgo.ApplicationCommandInteractionDataOption) r.GameSettings {
+	settings := r.GameSettings(r.DefaultGameSettings)
 
 	optionMap := make(map[string]*discordgo.ApplicationCommandInteractionDataOption, len(options))
 	for _, opt := range options {
@@ -45,31 +45,31 @@ var RouletteHandle = Handler{
 		Options: []*discordgo.ApplicationCommandOption{
 			{
 				Name:        "num_chambers",
-				Description: fmt.Sprintf("Number of chambers in gun, defaults to %d", roulette.DefaultNumChamber),
+				Description: fmt.Sprintf("Number of chambers in gun, defaults to %d", r.DefaultNumChamber),
 				Type:        discordgo.ApplicationCommandOptionInteger,
 				Required:    false,
 			},
 			{
 				Name:        "num_bullets",
-				Description: fmt.Sprintf("Number of bullets in gun, defaults to %d", roulette.DefaultNumBullet),
+				Description: fmt.Sprintf("Number of bullets in gun, defaults to %d", r.DefaultNumBullet),
 				Type:        discordgo.ApplicationCommandOptionInteger,
 				Required:    false,
 			},
 			{
 				Name:        "spin_chamber",
-				Description: fmt.Sprintf("Spin chamber after pulling trigger, defaults to %t", roulette.DefaultSpinChamber),
+				Description: fmt.Sprintf("Spin chamber after pulling trigger, defaults to %t", r.DefaultSpinChamber),
 				Type:        discordgo.ApplicationCommandOptionBoolean,
 				Required:    false,
 			},
 			{
 				Name:        "spin_chamber_on_shot",
-				Description: fmt.Sprintf("Spin chamber after gun fires, defaults to %t", roulette.DefaultSpinChamberOnShot),
+				Description: fmt.Sprintf("Spin chamber after gun fires, defaults to %t", r.DefaultSpinChamberOnShot),
 				Type:        discordgo.ApplicationCommandOptionBoolean,
 				Required:    false,
 			},
 			{
 				Name:        "replace_bullets",
-				Description: fmt.Sprintf("Replace bullets if gun fires, defaults to %t", roulette.DefaultReplaceBullet),
+				Description: fmt.Sprintf("Replace bullets if gun fires, defaults to %t", r.DefaultReplaceBullet),
 				Type:        discordgo.ApplicationCommandOptionBoolean,
 				Required:    false,
 			},
@@ -82,7 +82,7 @@ var RouletteHandle = Handler{
 		s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
-				Content: roulette.GameStart(&settings),
+				Content: r.GameStart(&settings),
 			},
 		})
 	},
