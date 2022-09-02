@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+    bot:
+        container_name: discord_roulette
+        build:
+            context: .
+            dockerfile: ./Dockerfile.dev
+        env_file: .env
+        volumes:
+            - .:/usr/src/app

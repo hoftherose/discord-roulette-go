@@ -33,7 +33,6 @@ func getSettingsFromOptions(options []*discordgo.ApplicationCommandInteractionDa
 			settings.ReplaceBullet = replaceBulletValue.BoolValue()
 		}
 	}
-	fmt.Println(settings.NumBullet)
 	return settings
 }
 
