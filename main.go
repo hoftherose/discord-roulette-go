@@ -10,6 +10,14 @@ import (
 	h "github.com/holy-tech/discord-roulette/src/handlers"
 )
 
+func init() {
+	file, err := os.Create("database.db")
+	defer file.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func main() {
 	discord, err := discordgo.New("Bot " + os.Getenv("DISCORD_TOKEN"))
 	if err != nil {
