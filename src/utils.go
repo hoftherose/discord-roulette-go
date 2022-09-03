@@ -4,8 +4,8 @@ import (
 	"log"
 )
 
-func CheckErr(err error) {
+func CheckErr(message string, err error) {
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf(message, err)
 	}
 }

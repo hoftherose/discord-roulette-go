@@ -7,31 +7,27 @@ import (
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
+	u "github.com/holy-tech/discord-roulette/src"
 	h "github.com/holy-tech/discord-roulette/src/handlers"
 )
 
 func init() {
 	file, err := os.Create("database.db")
+	u.CheckErr("%v", err)
 	defer file.Close()
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
 func main() {
 	discord, err := discordgo.New("Bot " + os.Getenv("DISCORD_TOKEN"))
-	if err != nil {
-		log.Fatalf("Invalid paramters: %v", err)
-	}
+	u.CheckErr("Invalid paramters: %v", err)
 
 	discord.AddHandler(h.Ready)
 	discord.AddHandler(func(s *discordgo.Session, r *discordgo.Ready) {
 		log.Printf("Logged in as: %v#%v", s.State.User.Username, s.State.User.Discriminator)
 	})
 
-	if err := discord.Open(); err != nil {
-		log.Fatalf("Could not open session: %v", err)
-	}
+	err = discord.Open()
+	u.CheckErr("Could not open session: %v", err)
 	defer discord.Close()
 
 	h.AppendHandler(discord, &h.RouletteHandle)
