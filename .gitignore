@@ -17,3 +17,5 @@
 bin/*
 tmp/*
 .env
+*.db
+*.sqlite
