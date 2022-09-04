@@ -5,8 +5,13 @@ import (
 	"os"
 
 	u "github.com/holy-tech/discord-roulette/src"
+	db "github.com/holy-tech/discord-roulette/src/repo"
 	_ "github.com/mattn/go-sqlite3"
 )
+
+func init() {
+	db.CreateTable()
+}
 
 func InitializeGame(channelId string) string {
 	challengeFile := fmt.Sprintf("%s_challenge.txt", channelId)
@@ -14,7 +19,3 @@ func InitializeGame(channelId string) string {
 	u.CheckErr("Failed to create challenge", err)
 	return "Challenge created in " + challengeFile
 }
-
-// func RegisterStartGame(channelId string) {
-// 	db.Connection
-// }
