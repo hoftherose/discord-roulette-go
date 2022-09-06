@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	u "github.com/holy-tech/discord-roulette/src"
-	_ "github.com/mattn/go-sqlite3"
 )
 
 func CreateTable() {

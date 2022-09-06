@@ -6,7 +6,7 @@ import (
 
 	u "github.com/holy-tech/discord-roulette/src"
 	db "github.com/holy-tech/discord-roulette/src/repo"
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq"
 )
 
 func init() {
