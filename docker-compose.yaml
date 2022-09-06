@@ -8,3 +8,24 @@ services:
         env_file: .env
         volumes:
             - .:/usr/src/app
+    database:
+        container_name: database
+        image: postgres:14.5
+        restart: always
+        environment:
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: root
+            POSTGRES_DB: test_db
+        volumes:
+            - ./db:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+    pgadmin:
+        container_name: pgadmin4_container
+        image: dpage/pgadmin4:6.13
+        restart: always
+        environment:
+            PGADMIN_DEFAULT_EMAIL: root@root.com
+            PGADMIN_DEFAULT_PASSWORD: root
+        ports:
+            - "5050:80"
