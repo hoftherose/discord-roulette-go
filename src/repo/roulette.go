@@ -8,9 +8,7 @@ import (
 
 func CreateTable() {
 	users_table := InitTable
-	query, err := Connection.Prepare(users_table)
-	u.CheckErr("Error in preparing query: %v", err)
-	_, err = query.Exec()
+	_, err := Connection.Exec(users_table)
 	u.CheckErr("Error executing query: %v", err)
 	fmt.Println("Table created successfully!")
 }
