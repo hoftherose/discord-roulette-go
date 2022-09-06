@@ -11,12 +11,6 @@ import (
 	h "github.com/holy-tech/discord-roulette/src/handlers"
 )
 
-func init() {
-	file, err := os.Create("database.db")
-	u.CheckErr("%v", err)
-	defer file.Close()
-}
-
 func main() {
 	discord, err := discordgo.New("Bot " + os.Getenv("DISCORD_TOKEN"))
 	u.CheckErr("Invalid paramters: %v", err)
