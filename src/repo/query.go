@@ -1,10 +1,11 @@
 package repo
 
 const InitTable = `
-	CREATE TABLE users (
+	CREATE TABLE IF NOT EXISTS users (
 		id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-		"FirstName" TEXT,
-		"LastName" TEXT,
-		"Dept" TEXT,
-		"Salary" INT
+		"user_name" TEXT,
+		"num_wins" TEXT,
+		"num_losses" TEXT,
+		"created_at" INT
+		"deleted_at" INT
 	);`
