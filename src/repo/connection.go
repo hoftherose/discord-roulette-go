@@ -1,16 +1,18 @@
 package repo
 
 import (
-	"database/sql"
+	"context"
 
 	u "github.com/holy-tech/discord-roulette/src"
-	_ "github.com/lib/pq"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var Connection *sql.DB
+var Client *mongo.Client
+var uri = "mongodb://root:root@localhost:27017"
 
 func init() {
 	var err error
-	Connection, err = sql.Open("postgres", "postgres://root:root@database/test_db?sslmode=disable")
+	Client, err = mongo.Connect(context.Background(), options.Client().ApplyURI(uri))
 	u.CheckErr("Could not return DB connection: %v", err)
 }
