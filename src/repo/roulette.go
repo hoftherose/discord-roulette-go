@@ -26,5 +26,5 @@ func CreateGameDocument(channel string) error {
 		fmt.Printf("Table created successfully: %v\n", result)
 		return nil
 	}
-	return errors.New("Game already exists")
+	return errors.New("game already exists")
 }

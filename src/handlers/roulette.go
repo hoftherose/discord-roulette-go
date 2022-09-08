@@ -9,7 +9,7 @@ import (
 
 var defaultAdmin int64 = discordgo.PermissionAdministrator
 
-func getSettingsFromOptions(options []*discordgo.ApplicationCommandInteractionDataOption) r.GameSettings {
+func getSettingsFromOptions(options []*discordgo.ApplicationCommandInteractionDataOption, channel string) r.GameSettings {
 	settings := r.GameSettings(r.DefaultGameSettings)
 
 	optionMap := make(map[string]*discordgo.ApplicationCommandInteractionDataOption, len(options))
@@ -32,6 +32,7 @@ func getSettingsFromOptions(options []*discordgo.ApplicationCommandInteractionDa
 		if replaceBulletValue, ok := optionMap["replace_bullets"]; ok {
 			settings.ReplaceBullet = replaceBulletValue.BoolValue()
 		}
+		settings.Channel = channel
 	}
 	return settings
 }
@@ -76,7 +77,7 @@ var RouletteHandle = Handler{
 	},
 	func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		options := i.ApplicationCommandData().Options
-		settings := getSettingsFromOptions(options)
+		settings := getSettingsFromOptions(options, i.ChannelID)
 
 		s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
