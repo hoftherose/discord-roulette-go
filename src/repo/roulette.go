@@ -17,7 +17,7 @@ func CreateGameDocument(channel string) error {
 	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelCtx()
 
-	gameCollection.FindOne(ctx, bson.D{{"x", 1}}).Decode(&result)
+	gameCollection.FindOne(ctx, bson.D{}).Decode(&result)
 
 	if result == nil {
 		result, err := gameCollection.InsertOne(ctx, bson.D{{"x", 1}})
