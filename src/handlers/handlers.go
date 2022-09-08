@@ -19,7 +19,9 @@ func Ready(session *discordgo.Session, event *discordgo.Ready) {
 
 func AppendHandler(s *discordgo.Session, h *Handler) {
 	s.AddHandler(func(s *discordgo.Session, i *discordgo.InteractionCreate) {
-		h.commandHandler(s, i)
+		if h.commandSpecs.Name == i.ApplicationCommandData().Name {
+			h.commandHandler(s, i)
+		}
 	})
 	_, err := s.ApplicationCommandCreate(s.State.User.ID, *guildID, h.commandSpecs)
 	if err != nil {
