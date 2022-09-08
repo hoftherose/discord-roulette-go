@@ -18,7 +18,6 @@ func CreateGameDocument(channel string) error {
 	defer cancelCtx()
 
 	gameCollection.FindOne(ctx, bson.D{{"x", 1}}).Decode(&result)
-	fmt.Println(result)
 
 	if result == nil {
 		result, err := gameCollection.InsertOne(ctx, bson.D{{"x", 1}})
@@ -27,4 +26,16 @@ func CreateGameDocument(channel string) error {
 		return nil
 	}
 	return errors.New("game already exists")
+}
+
+func DeleteGameDocument(channel string) error {
+	db := Client.Database("games")
+	gameCollection := db.Collection(fmt.Sprintf("%s_game", channel))
+	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancelCtx()
+
+	result, err := gameCollection.DeleteOne(ctx, bson.D{{"x", 1}})
+	fmt.Println(result)
+
+	return err
 }
