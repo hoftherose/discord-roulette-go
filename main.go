@@ -25,6 +25,7 @@ func main() {
 	defer discord.Close()
 
 	h.AppendHandler(discord, &h.RouletteHandle)
+	h.AppendHandler(discord, &h.ShootHandle)
 
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
