@@ -9,8 +9,7 @@ import (
 
 func GameStart(p *GameSettings) string {
 	resp := fmt.Sprintf("Preparing a %d-shooter with %d bullet(s).", p.NumChamber, p.NumBullet)
-	doc := SettingToDoc(p)
-	if err := db.CreateGameDocument(p.Channel, doc); err != nil {
+	if err := db.CreateGameDocument(p.Channel, p); err != nil {
 		log.Printf("Error creating game document: %v", err)
 		resp = fmt.Sprintf("Error: %v", err)
 	}

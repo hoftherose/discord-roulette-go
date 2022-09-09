@@ -2,8 +2,6 @@ package roulette
 
 import (
 	"github.com/bwmarrin/discordgo"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var (
@@ -17,13 +15,13 @@ var (
 )
 
 type GameSettings struct {
-	Opponent          *discordgo.User
-	NumChamber        int64  `default:"6"`
-	NumBullet         int64  `default:"1"`
-	SpinChamber       bool   `default:"false"`
-	SpinChamberOnShot bool   `default:"false"`
-	ReplaceBullet     bool   `default:"false"`
-	Channel           string `default:"none"`
+	Opponent          *discordgo.User `json:"opponent,omitempty"`
+	NumChamber        int64           `json:"num_chambers,omitempty"`
+	NumBullet         int64           `json:"num_bullets,omitempty"`
+	SpinChamber       bool            `json:"spin_chamber,omitempty"`
+	SpinChamberOnShot bool            `json:"spin_chamber_on_shot,omitempty"`
+	ReplaceBullet     bool            `json:"replace_bullet,omitempty"`
+	Channel           string          `json:"channel,omitempty"`
 }
 
 var DefaultGameSettings GameSettings = GameSettings{
@@ -34,8 +32,4 @@ var DefaultGameSettings GameSettings = GameSettings{
 	DefaultSpinChamberOnShot,
 	DefaultReplaceBullet,
 	DefaultChannel,
-}
-
-func SettingToDoc(p *GameSettings) primitive.D {
-	return bson.D{{"Players", 1}}
 }
