@@ -20,7 +20,7 @@ func CreateGameDocument(channel string) error {
 	gameCollection.FindOne(ctx, bson.D{}).Decode(&result)
 
 	if result == nil {
-		result, err := gameCollection.InsertOne(ctx, bson.D{{"x", 1}})
+		result, err := gameCollection.InsertOne(ctx, bson.D{{"Players", 1}})
 		u.CheckErr("Error executing query: %v\n", err)
 		fmt.Printf("Table created successfully: %v\n", result)
 		return nil
@@ -35,7 +35,9 @@ func DeleteGameDocument(channel string) error {
 	defer cancelCtx()
 
 	result, err := gameCollection.DeleteOne(ctx, bson.D{{"x", 1}})
-	fmt.Println(result)
-
+	if result.DeletedCount != 1 {
+		return errors.New("no game is currently ongoing")
+	}
 	return err
+
 }
