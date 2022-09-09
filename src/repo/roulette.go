@@ -8,9 +8,10 @@ import (
 
 	u "github.com/holy-tech/discord-roulette/src"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func CreateGameDocument(channel string) error {
+func CreateGameDocument(channel string, settings primitive.D) error {
 	var result bson.M
 	db := Client.Database("games")
 	gameCollection := db.Collection(fmt.Sprintf("%s_game", channel))
@@ -20,7 +21,8 @@ func CreateGameDocument(channel string) error {
 	gameCollection.FindOne(ctx, bson.D{}).Decode(&result)
 
 	if result == nil {
-		result, err := gameCollection.InsertOne(ctx, bson.D{{"Players", 1}})
+		settings := bson.D{{"Players", 1}}
+		result, err := gameCollection.InsertOne(ctx, settings)
 		u.CheckErr("Error executing query: %v\n", err)
 		fmt.Printf("Table created successfully: %v\n", result)
 		return nil
