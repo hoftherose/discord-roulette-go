@@ -18,7 +18,9 @@ func getSettingsFromOptions(s *discordgo.Session, options []*discordgo.Applicati
 	}
 	{
 		if opponent, ok := optionMap["opponent"]; ok {
-			settings.Opponent = opponent.UserValue(s)
+			challenger := s.State.User
+			settings.Opponents = append(settings.Opponents, challenger)
+			settings.Opponents = append(settings.Opponents, opponent.UserValue(s))
 		}
 		if numChamberValue, ok := optionMap["num_chambers"]; ok {
 			settings.NumChamber = numChamberValue.IntValue()
