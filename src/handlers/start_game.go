@@ -9,7 +9,7 @@ import (
 
 var defaultAdmin int64 = discordgo.PermissionAdministrator
 
-func getSettingsFromOptions(options []*discordgo.ApplicationCommandInteractionDataOption, channel string) r.GameSettings {
+func getSettingsFromOptions(s *discordgo.Session, options []*discordgo.ApplicationCommandInteractionDataOption, channel string) r.GameSettings {
 	settings := r.GameSettings(r.DefaultGameSettings)
 
 	optionMap := make(map[string]*discordgo.ApplicationCommandInteractionDataOption, len(options))
@@ -17,6 +17,9 @@ func getSettingsFromOptions(options []*discordgo.ApplicationCommandInteractionDa
 		optionMap[opt.Name] = opt
 	}
 	{
+		if opponent, ok := optionMap["opponent"]; ok {
+			settings.Opponent = opponent.UserValue(s)
+		}
 		if numChamberValue, ok := optionMap["num_chambers"]; ok {
 			settings.NumChamber = numChamberValue.IntValue()
 		}
@@ -43,6 +46,12 @@ var RouletteHandle = Handler{
 		Description:              "Roulette command",
 		DefaultMemberPermissions: &defaultAdmin,
 		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Name:        "opponent",
+				Description: fmt.Sprintf("Number of chambers in gun, defaults to %d", r.DefaultNumChamber),
+				Type:        discordgo.ApplicationCommandOptionUser,
+				Required:    true,
+			},
 			{
 				Name:        "num_chambers",
 				Description: fmt.Sprintf("Number of chambers in gun, defaults to %d", r.DefaultNumChamber),
@@ -77,7 +86,7 @@ var RouletteHandle = Handler{
 	},
 	func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		options := i.ApplicationCommandData().Options
-		settings := getSettingsFromOptions(options, i.ChannelID)
+		settings := getSettingsFromOptions(s, options, i.ChannelID)
 
 		s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,

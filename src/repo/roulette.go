@@ -34,7 +34,7 @@ func DeleteGameDocument(channel string) error {
 	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelCtx()
 
-	result, err := gameCollection.DeleteOne(ctx, bson.D{{"x", 1}})
+	result, err := gameCollection.DeleteOne(ctx, bson.D{{}})
 	if result.DeletedCount != 1 {
 		return errors.New("no game is currently ongoing")
 	}

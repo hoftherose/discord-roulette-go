@@ -4,19 +4,22 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/bwmarrin/discordgo"
 	db "github.com/holy-tech/discord-roulette/src/repo"
 )
 
-const (
+var (
+	DefaultOpponent          *discordgo.User
 	DefaultNumChamber        int64  = 6
 	DefaultNumBullet         int64  = 1
 	DefaultSpinChamber       bool   = false
 	DefaultSpinChamberOnShot bool   = false
 	DefaultReplaceBullet     bool   = false
-	Channel                  string = ""
+	DefaultChannel           string = ""
 )
 
 type GameSettings struct {
+	Opponent          *discordgo.User
 	NumChamber        int64  `default:"6"`
 	NumBullet         int64  `default:"1"`
 	SpinChamber       bool   `default:"false"`
@@ -26,12 +29,13 @@ type GameSettings struct {
 }
 
 var DefaultGameSettings GameSettings = GameSettings{
+	DefaultOpponent,
 	DefaultNumChamber,
 	DefaultNumBullet,
 	DefaultSpinChamber,
 	DefaultSpinChamberOnShot,
 	DefaultReplaceBullet,
-	Channel,
+	DefaultChannel,
 }
 
 func GameStart(p *GameSettings) string {
