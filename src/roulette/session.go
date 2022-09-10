@@ -19,7 +19,7 @@ func getOpponentsSettings(s *GameSettings) []string {
 func GameStart(s *GameSettings) string {
 	opponents := getOpponentsSettings(s)
 	resp := fmt.Sprintf(
-		`Preparing a %d-shooter with %d bullet(s). Prepare your self %s`,
+		`Preparing a %d-shooter with %d bullet(s). Prepare your self: %s`,
 		s.NumChamber, s.NumBullet, u.JoinStrings(", ", opponents...),
 	)
 	if err := db.CreateGameDocument(s.Channel, s); err != nil {
