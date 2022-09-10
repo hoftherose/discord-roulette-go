@@ -4,11 +4,24 @@ import (
 	"fmt"
 	"log"
 
+	u "github.com/holy-tech/discord-roulette/src"
 	db "github.com/holy-tech/discord-roulette/src/repo"
 )
 
+func getOpponentsSettings(s *GameSettings) []string {
+	opponents := make([]string, len(s.Opponents))
+	for i, o := range s.Opponents {
+		opponents[i] = "<@" + o.ID + ">"
+	}
+	return opponents
+}
+
 func GameStart(s *GameSettings) string {
-	resp := fmt.Sprintf("Preparing a %d-shooter with %d bullet(s).", s.NumChamber, s.NumBullet)
+	opponents := getOpponentsSettings(s)
+	resp := fmt.Sprintf(
+		`Preparing a %d-shooter with %d bullet(s). Prepare your self %s`,
+		s.NumChamber, s.NumBullet, u.JoinStrings(", ", opponents...),
+	)
 	if err := db.CreateGameDocument(s.Channel, s); err != nil {
 		log.Printf("Error creating game document: %v", err)
 		resp = fmt.Sprintf("Error: %v", err)
