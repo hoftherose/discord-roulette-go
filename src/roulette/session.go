@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/bwmarrin/discordgo"
 	u "github.com/holy-tech/discord-roulette/src"
 	db "github.com/holy-tech/discord-roulette/src/repo"
 )
@@ -29,17 +30,18 @@ func GameStart(s *GameSettings) string {
 	return resp
 }
 
-func ChallengeAccept(s *GameSettings) string {
-	return "you accepted!!"
+func ChallengeAccept(user *discordgo.User, channel string) string {
+	return "<@" + user.ID + "> has accepted!!"
 }
 
-func ChallengeDeny(s *GameSettings) string {
-	return "you denied!!!"
+func ChallengeDeny(user *discordgo.User, channel string) string {
+	resp := GameEnd(channel)
+	return "<@" + user.ID + "> has denied!!\n" + resp
 }
 
-func GameEnd(p *GameSettings) string {
-	resp := fmt.Sprintf("Putting gun away\nThe winner is: %s in %s", "Winner", p.Channel)
-	if err := db.DeleteGameDocument(p.Channel); err != nil {
+func GameEnd(channel string) string {
+	resp := fmt.Sprintf("Putting gun away\nThe winner is: %s in %s", "Winner", channel)
+	if err := db.DeleteGameDocument(channel); err != nil {
 		log.Printf("Error removing game: %v", err)
 		resp = fmt.Sprintf("Error: %v", err)
 	}

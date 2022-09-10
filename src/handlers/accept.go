@@ -12,10 +12,12 @@ var AcceptHandle = Handler{
 		DefaultMemberPermissions: &defaultAdmin,
 	},
 	func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		challenger := i.Member.User
+		channel := i.ChannelID
 		s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
-				Content: r.ChallengeAccept(&r.GameSettings{Channel: i.ChannelID}),
+				Content: r.ChallengeAccept(challenger, channel),
 			},
 		})
 	},
@@ -28,10 +30,12 @@ var DenyHandle = Handler{
 		DefaultMemberPermissions: &defaultAdmin,
 	},
 	func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		challenger := i.Member.User
+		channel := i.ChannelID
 		s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
-				Content: r.ChallengeDeny(&r.GameSettings{Channel: i.ChannelID}),
+				Content: r.ChallengeDeny(challenger, channel),
 			},
 		})
 	},

@@ -12,13 +12,10 @@ var ShootHandle = Handler{
 		DefaultMemberPermissions: &defaultAdmin,
 	},
 	func(s *discordgo.Session, i *discordgo.InteractionCreate) {
-		// channel := i.ChannelID
-		// user := i.User.ID
-
 		s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
-				Content: r.GameEnd(&r.GameSettings{Channel: i.ChannelID}),
+				Content: r.GameEnd(i.ChannelID),
 			},
 		})
 	},
