@@ -7,9 +7,9 @@ import (
 	db "github.com/holy-tech/discord-roulette/src/repo"
 )
 
-func GameStart(p *GameSettings) string {
-	resp := fmt.Sprintf("Preparing a %d-shooter with %d bullet(s).", p.NumChamber, p.NumBullet)
-	if err := db.CreateGameDocument(p.Channel, p); err != nil {
+func GameStart(s *GameSettings) string {
+	resp := fmt.Sprintf("Preparing a %d-shooter with %d bullet(s).", s.NumChamber, s.NumBullet)
+	if err := db.CreateGameDocument(s.Channel, s); err != nil {
 		log.Printf("Error creating game document: %v", err)
 		resp = fmt.Sprintf("Error: %v", err)
 	}
