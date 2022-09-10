@@ -29,6 +29,14 @@ func GameStart(s *GameSettings) string {
 	return resp
 }
 
+func ChallengeAccept(s *GameSettings) string {
+	return "you accepted!!"
+}
+
+func ChallengeDeny(s *GameSettings) string {
+	return "you denied!!!"
+}
+
 func GameEnd(p *GameSettings) string {
 	resp := fmt.Sprintf("Putting gun away\nThe winner is: %s in %s", "Winner", p.Channel)
 	if err := db.DeleteGameDocument(p.Channel); err != nil {

@@ -7,7 +7,7 @@ import (
 
 var ShootHandle = Handler{
 	&discordgo.ApplicationCommand{
-		Name:                     "shoot",
+		Name:                     "roulette-shoot",
 		Description:              "Pull the trigger",
 		DefaultMemberPermissions: &defaultAdmin,
 	},

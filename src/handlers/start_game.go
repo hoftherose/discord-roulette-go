@@ -48,8 +48,8 @@ func getSettingsFromOptions(
 
 var RouletteHandle = Handler{
 	&discordgo.ApplicationCommand{
-		Name:                     "roulette-command",
-		Description:              "Roulette command",
+		Name:                     "roulette-start",
+		Description:              "Roulette start game",
 		DefaultMemberPermissions: &defaultAdmin,
 		Options: []*discordgo.ApplicationCommandOption{
 			{
