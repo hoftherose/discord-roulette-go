@@ -39,5 +39,16 @@ func DeleteGameDocument(channel string) error {
 		return errors.New("no game is currently ongoing")
 	}
 	return err
+}
 
+func GameIsAccepted(channel string) bool {
+	var result bson.M
+	db := Client.Database("games")
+	gameCollection := db.Collection(fmt.Sprintf("%s_game", channel))
+	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancelCtx()
+
+	gameCollection.FindOne(ctx, bson.D{{}}).Decode(&result)
+	fmt.Println(result)
+	return true
 }
