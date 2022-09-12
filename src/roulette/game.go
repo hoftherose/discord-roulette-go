@@ -9,7 +9,7 @@ func Died() bool {
 }
 
 func ShootTurn(channel string, user string) string {
-	if !db.GameIsAccepted(channel) {
+	if !db.GameIsAcceptedBy(channel, user) {
 		return "Game still is not accepted"
 	}
 	if Died() {
