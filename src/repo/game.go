@@ -48,7 +48,7 @@ func GameIsAccepted(channel string) bool {
 	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelCtx()
 
-	gameCollection.FindOne(ctx, bson.D{{}}).Decode(&result)
-	fmt.Println(result)
-	return true
+	gameCollection.FindOne(ctx, bson.M{"channel": channel}).Decode(&result)
+	temp := result["opponents"].(bson.A)[0].(bson.M)["accepted"]
+	return temp != ""
 }
