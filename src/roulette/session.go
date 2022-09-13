@@ -22,7 +22,7 @@ func GameStart(s *d.GameSettings) string {
 	opponents := getOpponentsSettings(s)
 	resp := fmt.Sprintf(
 		`Preparing a %d-shooter with %d bullet(s). Prepare your self: %s`,
-		s.NumChamber, s.NumBullet, u.JoinStrings(", ", opponents...),
+		s.GunState.NumChamber, s.GunState.NumBullets, u.JoinStrings(", ", opponents...),
 	)
 	if err := db.CreateGameDocument(s.Channel, s); err != nil {
 		log.Printf("Error creating game document: %v", err)

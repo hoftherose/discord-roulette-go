@@ -28,10 +28,10 @@ func getSettingsFromOptions(
 			settings.Opponents = append(settings.Opponents, d.Player{User: *opponent.UserValue(s), Accepted: ""})
 		}
 		if numChamberValue, ok := optionMap["num_chambers"]; ok {
-			settings.NumChamber = numChamberValue.IntValue()
+			settings.GunState.NumChamber = numChamberValue.IntValue()
 		}
 		if numBulletValue, ok := optionMap["num_bullets"]; ok {
-			settings.NumBullet = numBulletValue.IntValue()
+			settings.GunState.NumBullets = numBulletValue.IntValue()
 		}
 		if spinChamberValue, ok := optionMap["spin_chamber"]; ok {
 			settings.SpinChamber = spinChamberValue.BoolValue()
