@@ -9,10 +9,13 @@ func Died() bool {
 }
 
 func ShootTurn(channel string, user string) string {
-	if !db.GameIsAcceptedBy(channel, user) {
-		return "Game still is not accepted"
+	accepted, err := db.GameIsAcceptedBy(channel, user)
+	if err != nil {
+		return err.Error()
 	}
-	if Died() {
+	if !accepted {
+		return "Game still is not accepted"
+	} else if Died() {
 		return "You died <@" + user + ">"
 	}
 	return "You live <@" + user + ">"

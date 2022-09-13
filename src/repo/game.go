@@ -41,7 +41,7 @@ func DeleteGameDocument(channel string) error {
 	return err
 }
 
-func GameIsAcceptedBy(channel string, user string) bool {
+func GameIsAcceptedBy(channel string, user string) (bool, error) {
 	var result bson.M
 	db := Client.Database("games")
 	gameCollection := db.Collection(fmt.Sprintf("%s_game", channel))
@@ -50,7 +50,9 @@ func GameIsAcceptedBy(channel string, user string) bool {
 
 	gameCollection.FindOne(ctx, bson.M{"channel": channel}).Decode(&result)
 	// TODO look for specific player
-	// temp := result["opponents"].(bson.A)[0].(bson.M)["accepted"]
-	// return temp != ""
-	return false
+	if len(result) == 0 {
+		return false, errors.New("game not found")
+	}
+	temp := result["opponents"].(bson.A)[0].(bson.M)["accepted"]
+	return temp != "", nil
 }

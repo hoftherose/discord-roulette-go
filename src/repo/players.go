@@ -13,7 +13,10 @@ import (
 
 func AcceptPlayer(channel string, user string) error {
 	var result d.GameSettings
-	if GameIsAcceptedBy(channel, user) {
+	accepted, err := GameIsAcceptedBy(channel, user)
+	if err != nil {
+		return err
+	} else if accepted {
 		return errors.New("you have already accepted")
 	}
 
