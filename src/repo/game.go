@@ -50,6 +50,7 @@ func GameIsAcceptedBy(channel string, user string) bool {
 
 	gameCollection.FindOne(ctx, bson.M{"channel": channel}).Decode(&result)
 	// TODO look for specific player
-	temp := result["opponents"].(bson.A)[0].(bson.M)["accepted"]
-	return temp != ""
+	// temp := result["opponents"].(bson.A)[0].(bson.M)["accepted"]
+	// return temp != ""
+	return false
 }
