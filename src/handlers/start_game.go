@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
+	d "github.com/holy-tech/discord-roulette/src/data"
 	r "github.com/holy-tech/discord-roulette/src/roulette"
 )
 
@@ -14,8 +15,8 @@ func getSettingsFromOptions(
 	opt []*discordgo.ApplicationCommandInteractionDataOption,
 	challenger *discordgo.User,
 	channel string,
-) r.GameSettings {
-	settings := r.GameSettings(r.DefaultGameSettings)
+) d.GameSettings {
+	settings := d.GameSettings(d.DefaultGameSettings)
 
 	optionMap := make(map[string]*discordgo.ApplicationCommandInteractionDataOption, len(opt))
 	for _, opt := range opt {
@@ -23,8 +24,8 @@ func getSettingsFromOptions(
 	}
 	{
 		if opponent, ok := optionMap["opponent"]; ok {
-			settings.Opponents = append(settings.Opponents, r.Player{User: *challenger, Accepted: ""})
-			settings.Opponents = append(settings.Opponents, r.Player{User: *opponent.UserValue(s), Accepted: ""})
+			settings.Opponents = append(settings.Opponents, d.Player{User: *challenger, Accepted: ""})
+			settings.Opponents = append(settings.Opponents, d.Player{User: *opponent.UserValue(s), Accepted: ""})
 		}
 		if numChamberValue, ok := optionMap["num_chambers"]; ok {
 			settings.NumChamber = numChamberValue.IntValue()
@@ -54,37 +55,37 @@ var RouletteHandle = Handler{
 		Options: []*discordgo.ApplicationCommandOption{
 			{
 				Name:        "opponent",
-				Description: fmt.Sprintf("Number of chambers in gun, defaults to %d", r.DefaultNumChamber),
+				Description: fmt.Sprintf("Number of chambers in gun, defaults to %d", d.DefaultNumChamber),
 				Type:        discordgo.ApplicationCommandOptionUser,
 				Required:    true,
 			},
 			{
 				Name:        "num_chambers",
-				Description: fmt.Sprintf("Number of chambers in gun, defaults to %d", r.DefaultNumChamber),
+				Description: fmt.Sprintf("Number of chambers in gun, defaults to %d", d.DefaultNumChamber),
 				Type:        discordgo.ApplicationCommandOptionInteger,
 				Required:    false,
 			},
 			{
 				Name:        "num_bullets",
-				Description: fmt.Sprintf("Number of bullets in gun, defaults to %d", r.DefaultNumBullet),
+				Description: fmt.Sprintf("Number of bullets in gun, defaults to %d", d.DefaultNumBullet),
 				Type:        discordgo.ApplicationCommandOptionInteger,
 				Required:    false,
 			},
 			{
 				Name:        "spin_chamber",
-				Description: fmt.Sprintf("Spin chamber after pulling trigger, defaults to %t", r.DefaultSpinChamber),
+				Description: fmt.Sprintf("Spin chamber after pulling trigger, defaults to %t", d.DefaultSpinChamber),
 				Type:        discordgo.ApplicationCommandOptionBoolean,
 				Required:    false,
 			},
 			{
 				Name:        "spin_chamber_on_shot",
-				Description: fmt.Sprintf("Spin chamber after gun fires, defaults to %t", r.DefaultSpinChamberOnShot),
+				Description: fmt.Sprintf("Spin chamber after gun fires, defaults to %t", d.DefaultSpinChamberOnShot),
 				Type:        discordgo.ApplicationCommandOptionBoolean,
 				Required:    false,
 			},
 			{
 				Name:        "replace_bullets",
-				Description: fmt.Sprintf("Replace bullets if gun fires, defaults to %t", r.DefaultReplaceBullet),
+				Description: fmt.Sprintf("Replace bullets if gun fires, defaults to %t", d.DefaultReplaceBullet),
 				Type:        discordgo.ApplicationCommandOptionBoolean,
 				Required:    false,
 			},

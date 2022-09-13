@@ -1,4 +1,4 @@
-package roulette
+package data
 
 import (
 	"github.com/bwmarrin/discordgo"

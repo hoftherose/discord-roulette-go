@@ -6,10 +6,11 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	u "github.com/holy-tech/discord-roulette/src"
+	d "github.com/holy-tech/discord-roulette/src/data"
 	db "github.com/holy-tech/discord-roulette/src/repo"
 )
 
-func getOpponentsSettings(s *GameSettings) []string {
+func getOpponentsSettings(s *d.GameSettings) []string {
 	opponents := make([]string, len(s.Opponents))
 	for i, o := range s.Opponents {
 		opponents[i] = "<@" + o.ID + ">"
@@ -17,7 +18,7 @@ func getOpponentsSettings(s *GameSettings) []string {
 	return opponents
 }
 
-func GameStart(s *GameSettings) string {
+func GameStart(s *d.GameSettings) string {
 	opponents := getOpponentsSettings(s)
 	resp := fmt.Sprintf(
 		`Preparing a %d-shooter with %d bullet(s). Prepare your self: %s`,
