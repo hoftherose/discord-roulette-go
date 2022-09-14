@@ -6,8 +6,9 @@ import (
 	"fmt"
 	"time"
 
+	"log"
+
 	"github.com/bwmarrin/discordgo"
-	u "github.com/holy-tech/discord-roulette/src"
 	d "github.com/holy-tech/discord-roulette/src/data"
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -21,12 +22,14 @@ func CreateGameDocument(channel string, settings interface{}) error {
 
 	gameCollection.FindOne(ctx, bson.D{}).Decode(&result)
 
-	if result == nil {
-		_, err := gameCollection.InsertOne(ctx, settings)
-		u.CheckErr("Error executing query: %v\n", err)
-		return nil
+	if result != nil {
+		return errors.New("game already exists")
 	}
-	return errors.New("game already exists")
+	_, err := gameCollection.InsertOne(ctx, settings)
+	if err != nil {
+		log.Fatalf("Error executing query: %v\n", err)
+	}
+	return err
 }
 
 func DeleteGameDocument(channel string) error {

@@ -32,8 +32,9 @@ func GameStart(s *d.GameSettings) string {
 }
 
 func ChallengeAccept(channel string, user *discordgo.User) string {
-	if err := db.AcceptPlayer(channel, user); err != nil {
-		return err.Error()
+	err := db.AcceptPlayer(channel, user)
+	if err != nil {
+		return "<@" + user.ID + "> Could not accept: Game not found"
 	}
 	return "<@" + user.ID + "> has accepted!!"
 }

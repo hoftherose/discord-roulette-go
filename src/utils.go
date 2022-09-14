@@ -1,15 +1,5 @@
 package util
 
-import (
-	"log"
-)
-
-func CheckErr(message string, err error) {
-	if err != nil {
-		log.Fatalf(message, err)
-	}
-}
-
 func JoinStrings(sep string, str ...string) string {
 	if len(str) == 0 {
 		return ""

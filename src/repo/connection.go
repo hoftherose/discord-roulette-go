@@ -3,9 +3,9 @@ package repo
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 
-	u "github.com/holy-tech/discord-roulette/src"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -21,5 +21,8 @@ var uri = fmt.Sprintf("mongodb://%s:%s@%s:%s",
 func init() {
 	var err error
 	Client, err = mongo.Connect(context.Background(), options.Client().ApplyURI(uri))
-	u.CheckErr("Could not return DB connection: %v", err)
+	if err != nil {
+		log.Fatalf("Could not return DB connection: %v", err)
+	}
+
 }
