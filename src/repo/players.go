@@ -1,17 +1,16 @@
 package repo
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"errors"
 
 	"github.com/bwmarrin/discordgo"
-	d "github.com/holy-tech/discord-roulette/src/data"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
 func AcceptPlayer(channel string, user *discordgo.User) error {
-	var result d.GameSettings
 	accepted, err := GameIsAcceptedBy(channel, user)
 	if err != nil {
 		return err
@@ -19,8 +18,12 @@ func AcceptPlayer(channel string, user *discordgo.User) error {
 		return errors.New("you have already accepted")
 	}
 
+	result := GetGameDocument(channel)
+	result.Opponents[0].Accepted = "True"
 	update := UpdateGameDocument(bson.M{"channel": channel}, result, channel)
-	fmt.Println(result)
-	fmt.Println(update)
+	temp, _ := json.MarshalIndent(result, "", "    ")
+	temp2, _ := json.MarshalIndent(update, "", "    ")
+	fmt.Println(string(temp))
+	fmt.Println(string(temp2))
 	return nil
 }

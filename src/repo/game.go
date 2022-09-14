@@ -66,17 +66,15 @@ func UpdateGameDocument(filter interface{}, update interface{}, channel string) 
 }
 
 func GameIsAcceptedBy(channel string, user *discordgo.User) (bool, error) {
-	var result bson.M
-	db := Client.Database("games")
-	gameCollection := db.Collection(fmt.Sprintf("%s_game", channel))
-	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancelCtx()
+	result := GetGameDocument(channel)
+	fmt.Println(result)
 
-	gameCollection.FindOne(ctx, bson.M{"channel": channel}).Decode(&result)
 	// TODO look for specific player
-	if len(result) == 0 {
-		return false, errors.New("game not found")
-	}
-	temp := result["opponents"].(bson.A)[0].(bson.M)["accepted"]
+	// if len(result) == 0 {
+	// 	return false, errors.New("game not found")
+	// }
+	temp := result.Opponents[0].Accepted
+	fmt.Println("temp")
+	fmt.Println(temp)
 	return temp != "", nil
 }
