@@ -36,7 +36,7 @@ func ChallengeAccept(channel string, user *discordgo.User) string {
 	if err != nil {
 		return "<@" + user.ID + "> Could not accept: " + err.Error()
 	}
-	return "<@" + user.ID + "> has accepted!!"
+	return "<@" + user.ID + "> has accepted!!\n" + db.AwaitingPlayer(channel)
 }
 
 func ChallengeDeny(channel string, user *discordgo.User) string {

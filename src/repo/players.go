@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/bwmarrin/discordgo"
+	u "github.com/holy-tech/discord-roulette/src"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -16,10 +17,7 @@ func AcceptPlayer(channel string, user *discordgo.User) error {
 		return errors.New("you have already accepted")
 	}
 
-	result, err := GetGameDocument(channel)
-	if err != nil {
-		log.Fatalf("Could not get game: %v", err)
-	}
+	result, _ := GetGameDocument(channel)
 
 	for i, opponent := range result.Opponents {
 		if opponent.ID == user.ID {
@@ -32,4 +30,21 @@ func AcceptPlayer(channel string, user *discordgo.User) error {
 		return err
 	}
 	return nil
+}
+
+func AwaitingPlayer(channel string) string {
+	var awaitingPlayers []string
+	result, err := GetGameDocument(channel)
+	if err != nil {
+		log.Fatalf("Could not get game: %v", err)
+	}
+	for i, opponent := range result.Opponents {
+		if opponent.Accepted != "true" {
+			awaitingPlayers = append(awaitingPlayers, result.Opponents[i].ID)
+		}
+	}
+	if len(awaitingPlayers) == 0 {
+		return "All players have accepted!"
+	}
+	return "Still waiting for <@" + u.JoinStrings(">, <@", awaitingPlayers...) + ">"
 }
