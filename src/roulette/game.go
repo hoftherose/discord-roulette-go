@@ -10,6 +10,9 @@ import (
 
 func Shoot(s data.GameSettings) (bool, error) {
 	died := rand.Intn(int(s.GunState.NumChamber)) > int(s.GunState.NumBullets)
+	// if died {
+	// 	s.TableState.Losers[]
+	// }
 	return died, nil
 }
 

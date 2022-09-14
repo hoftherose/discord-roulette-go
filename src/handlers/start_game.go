@@ -24,8 +24,8 @@ func getSettingsFromOptions(
 	}
 	{
 		if opponent, ok := optionMap["opponent"]; ok {
-			settings.Opponents = append(settings.Opponents, d.Player{User: *challenger, Accepted: ""})
-			settings.Opponents = append(settings.Opponents, d.Player{User: *opponent.UserValue(s), Accepted: ""})
+			settings.Opponents[challenger.ID] = d.Player{User: *challenger, Accepted: ""}
+			settings.Opponents[opponent.UserValue(s).ID] = d.Player{User: *opponent.UserValue(s), Accepted: ""}
 		}
 		if numChamberValue, ok := optionMap["num_chambers"]; ok {
 			settings.GunState.NumChamber = numChamberValue.IntValue()

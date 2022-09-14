@@ -19,9 +19,10 @@ func AcceptPlayer(channel string, user *discordgo.User) error {
 
 	result, _ := GetGameDocument(channel)
 
-	for i, opponent := range result.Opponents {
-		if opponent.ID == user.ID {
-			result.Opponents[i].Accepted = "true"
+	for k, opponent := range result.Opponents {
+		if k == user.ID {
+			opponent.Accepted = "true"
+			result.Opponents[k] = opponent
 			break
 		}
 	}

@@ -10,16 +10,18 @@ import (
 	db "github.com/holy-tech/discord-roulette/src/repo"
 )
 
-func getOpponentsSettings(s *d.GameSettings) []string {
+func getOpponentsFromSettings(s *d.GameSettings) []string {
 	opponents := make([]string, len(s.Opponents))
-	for i, o := range s.Opponents {
-		opponents[i] = "<@" + o.ID + ">"
+	i := 0
+	for k := range s.Opponents {
+		opponents[i] = "<@" + k + ">"
+		i++
 	}
 	return opponents
 }
 
 func GameStart(s *d.GameSettings) string {
-	opponents := getOpponentsSettings(s)
+	opponents := getOpponentsFromSettings(s)
 	resp := fmt.Sprintf(
 		`Preparing a %d-shooter with %d bullet(s). Prepare your self: %s`,
 		s.GunState.NumChamber, s.GunState.NumBullets, u.JoinStrings(", ", opponents...),

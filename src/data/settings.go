@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	DefaultOpponents         []Player
+	DefaultOpponents         map[string]Player
 	DefaultGameAccepted      bool   = false
 	DefaultSpinChamber       bool   = false
 	DefaultSpinChamberOnShot bool   = false
@@ -19,14 +19,14 @@ type Player struct {
 }
 
 type GameSettings struct {
-	Opponents         []Player   `json:"opponent,omitempty"`
-	TableState        TableState `json:"num_chambers,omitempty"`
-	GunState          GunState   `json:"num_bullets,omitempty"`
-	GameAccepted      bool       `json:"game_accepted,omitempty"`
-	SpinChamber       bool       `json:"spin_chamber,omitempty"`
-	SpinChamberOnShot bool       `json:"spin_chamber_on_shot,omitempty"`
-	ReplaceBullet     bool       `json:"replace_bullet,omitempty"`
-	Channel           string     `json:"channel,omitempty"`
+	Opponents         map[string]Player `json:"opponent,omitempty"`
+	TableState        TableState        `json:"num_chambers,omitempty"`
+	GunState          GunState          `json:"num_bullets,omitempty"`
+	GameAccepted      bool              `json:"game_accepted,omitempty"`
+	SpinChamber       bool              `json:"spin_chamber,omitempty"`
+	SpinChamberOnShot bool              `json:"spin_chamber_on_shot,omitempty"`
+	ReplaceBullet     bool              `json:"replace_bullet,omitempty"`
+	Channel           string            `json:"channel,omitempty"`
 }
 
 var DefaultGameSettings GameSettings = GameSettings{
