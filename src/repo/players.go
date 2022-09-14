@@ -32,13 +32,6 @@ func AcceptPlayer(channel string, user *discordgo.User) error {
 	return nil
 }
 
-func AcceptGame(channel string) error {
-	result, _ := GetGameDocument(channel)
-	result.GameAccepted = true
-	err := UpdateGameDocument(bson.M{"channel": channel}, result, channel)
-	return err
-}
-
 func AwaitingPlayer(channel string) string {
 	var awaitingPlayers []string
 	result, err := GetGameDocument(channel)

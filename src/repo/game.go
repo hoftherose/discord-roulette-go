@@ -73,6 +73,13 @@ func UpdateGameDocument(filter interface{}, new interface{}, channel string) err
 	return nil
 }
 
+func AcceptGame(channel string) error {
+	result, _ := GetGameDocument(channel)
+	result.GameAccepted = true
+	err := UpdateGameDocument(bson.M{"channel": channel}, result, channel)
+	return err
+}
+
 func GameIsAccepted(channel string) (bool, error) {
 	result, err := GetGameDocument(channel)
 
