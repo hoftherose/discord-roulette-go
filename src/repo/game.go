@@ -7,7 +7,9 @@ import (
 	"time"
 
 	u "github.com/holy-tech/discord-roulette/src"
+	d "github.com/holy-tech/discord-roulette/src/data"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func CreateGameDocument(channel string, settings interface{}) error {
@@ -39,6 +41,27 @@ func DeleteGameDocument(channel string) error {
 		return errors.New("no game is currently ongoing")
 	}
 	return err
+}
+
+func GetGameDocument(channel string) d.GameSettings {
+	var result d.GameSettings
+	db := Client.Database("games")
+	gameCollection := db.Collection(fmt.Sprintf("%s_game", channel))
+	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancelCtx()
+
+	gameCollection.FindOne(ctx, bson.M{"channel": channel}).Decode(&result)
+	return result
+}
+
+func UpdateGameDocument(filter interface{}, update interface{}, channel string) *mongo.UpdateResult {
+	db := Client.Database("games")
+	gameCollection := db.Collection(fmt.Sprintf("%s_game", channel))
+	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancelCtx()
+
+	updated, _ := gameCollection.UpdateOne(ctx, bson.M{"channel": channel}, update)
+	return updated
 }
 
 func GameIsAcceptedBy(channel string, user string) (bool, error) {

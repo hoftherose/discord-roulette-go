@@ -1,9 +1,7 @@
 package repo
 
 import (
-	"context"
 	"fmt"
-	"time"
 
 	"errors"
 
@@ -20,13 +18,7 @@ func AcceptPlayer(channel string, user string) error {
 		return errors.New("you have already accepted")
 	}
 
-	db := Client.Database("games")
-	gameCollection := db.Collection(fmt.Sprintf("%s_game", channel))
-	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancelCtx()
-
-	gameCollection.FindOne(ctx, bson.M{"channel": channel}).Decode(&result)
-	update, _ := gameCollection.UpdateOne(ctx, bson.M{"channel": channel}, result)
+	update := UpdateGameDocument(bson.M{"channel": channel}, result, channel)
 	fmt.Println(result)
 	fmt.Println(update)
 	return nil
