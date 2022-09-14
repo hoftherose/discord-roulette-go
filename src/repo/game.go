@@ -10,7 +10,6 @@ import (
 	u "github.com/holy-tech/discord-roulette/src"
 	d "github.com/holy-tech/discord-roulette/src/data"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func CreateGameDocument(channel string, settings interface{}) error {
@@ -55,14 +54,20 @@ func GetGameDocument(channel string) d.GameSettings {
 	return result
 }
 
-func UpdateGameDocument(filter interface{}, update interface{}, channel string) *mongo.UpdateResult {
+func UpdateGameDocument(filter interface{}, new interface{}, channel string) error {
 	db := Client.Database("games")
 	gameCollection := db.Collection(fmt.Sprintf("%s_game", channel))
 	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelCtx()
 
-	updated, _ := gameCollection.UpdateOne(ctx, bson.M{"channel": channel}, update)
-	return updated
+	update, err := gameCollection.ReplaceOne(ctx, bson.M{"channel": channel}, new)
+
+	if err != nil {
+		return err
+	} else if update.ModifiedCount == 0 {
+		return errors.New("no update occured")
+	}
+	return nil
 }
 
 func GameIsAcceptedBy(channel string, user *discordgo.User) (bool, error) {

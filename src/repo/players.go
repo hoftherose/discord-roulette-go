@@ -20,10 +20,11 @@ func AcceptPlayer(channel string, user *discordgo.User) error {
 
 	result := GetGameDocument(channel)
 	result.Opponents[0].Accepted = "True"
-	update := UpdateGameDocument(bson.M{"channel": channel}, result, channel)
+	err = UpdateGameDocument(bson.M{"channel": channel}, result, channel)
+	if err != nil {
+		return err
+	}
 	temp, _ := json.MarshalIndent(result, "", "    ")
-	temp2, _ := json.MarshalIndent(update, "", "    ")
 	fmt.Println(string(temp))
-	fmt.Println(string(temp2))
 	return nil
 }
