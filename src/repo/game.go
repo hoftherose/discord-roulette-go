@@ -76,10 +76,14 @@ func UpdateGameDocument(filter interface{}, new interface{}, channel string) err
 func GameIsAcceptedBy(channel string, user *discordgo.User) (bool, error) {
 	result, err := GetGameDocument(channel)
 
-	// TODO look for specific player
 	if err != nil {
 		return false, errors.New("could not find game")
 	}
-	temp := result.Opponents[0].Accepted
-	return temp != "", nil
+
+	for i, opponent := range result.Opponents {
+		if opponent.ID == user.ID {
+			return result.Opponents[i].Accepted == "true", nil
+		}
+	}
+	return false, errors.New("could not find user in game")
 }

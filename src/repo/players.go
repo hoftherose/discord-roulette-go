@@ -21,7 +21,12 @@ func AcceptPlayer(channel string, user *discordgo.User) error {
 		log.Fatalf("Could not get game: %v", err)
 	}
 
-	result.Opponents[0].Accepted = "True"
+	for i, opponent := range result.Opponents {
+		if opponent.ID == user.ID {
+			result.Opponents[i].Accepted = "true"
+			break
+		}
+	}
 	err = UpdateGameDocument(bson.M{"channel": channel}, result, channel)
 	if err != nil {
 		return err
