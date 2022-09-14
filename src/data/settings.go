@@ -5,12 +5,12 @@ import (
 )
 
 var (
-	DefaultOpponents         map[string]Player
-	DefaultGameAccepted      bool   = false
-	DefaultSpinChamber       bool   = false
-	DefaultSpinChamberOnShot bool   = false
-	DefaultReplaceBullet     bool   = false
-	DefaultChannel           string = ""
+	DefaultOpponents         map[string]Player = map[string]Player{}
+	DefaultGameAccepted      bool              = false
+	DefaultSpinChamber       bool              = false
+	DefaultSpinChamberOnShot bool              = false
+	DefaultReplaceBullet     bool              = false
+	DefaultChannel           string            = ""
 )
 
 type Player struct {
