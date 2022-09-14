@@ -73,6 +73,16 @@ func UpdateGameDocument(filter interface{}, new interface{}, channel string) err
 	return nil
 }
 
+func GameIsAccepted(channel string) (bool, error) {
+	result, err := GetGameDocument(channel)
+
+	if err != nil {
+		return false, errors.New("could not find game")
+	}
+
+	return result.GameAccepted, nil
+}
+
 func GameIsAcceptedBy(channel string, user *discordgo.User) (bool, error) {
 	result, err := GetGameDocument(channel)
 
