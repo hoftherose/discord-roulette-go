@@ -43,15 +43,16 @@ func DeleteGameDocument(channel string) error {
 	return err
 }
 
-func GetGameDocument(channel string) d.GameSettings {
+func GetGameDocument(channel string) (d.GameSettings, error) {
 	var result d.GameSettings
 	db := Client.Database("games")
 	gameCollection := db.Collection(fmt.Sprintf("%s_game", channel))
 	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelCtx()
 
-	gameCollection.FindOne(ctx, bson.M{"channel": channel}).Decode(&result)
-	return result
+	enc_result := gameCollection.FindOne(ctx, bson.M{"channel": channel})
+	enc_result.Decode(&result)
+	return result, enc_result.Err()
 }
 
 func UpdateGameDocument(filter interface{}, new interface{}, channel string) error {
@@ -71,13 +72,12 @@ func UpdateGameDocument(filter interface{}, new interface{}, channel string) err
 }
 
 func GameIsAcceptedBy(channel string, user *discordgo.User) (bool, error) {
-	result := GetGameDocument(channel)
-	fmt.Println(result)
+	result, err := GetGameDocument(channel)
 
 	// TODO look for specific player
-	// if len(result) == 0 {
-	// 	return false, errors.New("game not found")
-	// }
+	if err != nil {
+		return false, err
+	}
 	temp := result.Opponents[0].Accepted
 	fmt.Println("temp")
 	fmt.Println(temp)
