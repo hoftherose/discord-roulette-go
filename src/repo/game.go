@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/bwmarrin/discordgo"
 	u "github.com/holy-tech/discord-roulette/src"
 	d "github.com/holy-tech/discord-roulette/src/data"
 	"go.mongodb.org/mongo-driver/bson"
@@ -64,7 +65,7 @@ func UpdateGameDocument(filter interface{}, update interface{}, channel string) 
 	return updated
 }
 
-func GameIsAcceptedBy(channel string, user string) (bool, error) {
+func GameIsAcceptedBy(channel string, user *discordgo.User) (bool, error) {
 	var result bson.M
 	db := Client.Database("games")
 	gameCollection := db.Collection(fmt.Sprintf("%s_game", channel))

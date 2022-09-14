@@ -15,7 +15,7 @@ var ShootHandle = Handler{
 		s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
-				Content: r.ShootTurn(i.ChannelID, i.Member.User.ID),
+				Content: r.ShootTurn(i.ChannelID, i.Member.User),
 			},
 		})
 	},

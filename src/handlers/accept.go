@@ -17,7 +17,7 @@ var AcceptHandle = Handler{
 		s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
-				Content: r.ChallengeAccept(challenger, channel),
+				Content: r.ChallengeAccept(channel, challenger),
 			},
 		})
 	},
@@ -35,7 +35,7 @@ var DenyHandle = Handler{
 		s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
-				Content: r.ChallengeDeny(challenger, channel),
+				Content: r.ChallengeDeny(channel, challenger),
 			},
 		})
 	},

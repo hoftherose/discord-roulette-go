@@ -31,11 +31,14 @@ func GameStart(s *d.GameSettings) string {
 	return resp
 }
 
-func ChallengeAccept(user *discordgo.User, channel string) string {
+func ChallengeAccept(channel string, user *discordgo.User) string {
+	if err := db.AcceptPlayer(channel, user); err != nil {
+		return err.Error()
+	}
 	return "<@" + user.ID + "> has accepted!!"
 }
 
-func ChallengeDeny(user *discordgo.User, channel string) string {
+func ChallengeDeny(channel string, user *discordgo.User) string {
 	resp := GameEnd(channel)
 	return "<@" + user.ID + "> has denied!!\n" + resp
 }
