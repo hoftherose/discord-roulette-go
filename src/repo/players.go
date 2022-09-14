@@ -1,9 +1,6 @@
 package repo
 
 import (
-	"encoding/json"
-	"fmt"
-
 	"errors"
 
 	"github.com/bwmarrin/discordgo"
@@ -27,7 +24,5 @@ func AcceptPlayer(channel string, user *discordgo.User) error {
 	if err != nil {
 		return err
 	}
-	temp, _ := json.MarshalIndent(result, "", "    ")
-	fmt.Println(string(temp))
 	return nil
 }

@@ -22,9 +22,8 @@ func CreateGameDocument(channel string, settings interface{}) error {
 	gameCollection.FindOne(ctx, bson.D{}).Decode(&result)
 
 	if result == nil {
-		result, err := gameCollection.InsertOne(ctx, settings)
+		_, err := gameCollection.InsertOne(ctx, settings)
 		u.CheckErr("Error executing query: %v\n", err)
-		fmt.Printf("Table created successfully: %v\n", result)
 		return nil
 	}
 	return errors.New("game already exists")
@@ -79,7 +78,5 @@ func GameIsAcceptedBy(channel string, user *discordgo.User) (bool, error) {
 		return false, err
 	}
 	temp := result.Opponents[0].Accepted
-	fmt.Println("temp")
-	fmt.Println(temp)
 	return temp != "", nil
 }
