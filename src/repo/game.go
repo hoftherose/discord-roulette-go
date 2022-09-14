@@ -78,7 +78,7 @@ func GameIsAcceptedBy(channel string, user *discordgo.User) (bool, error) {
 
 	// TODO look for specific player
 	if err != nil {
-		return false, err
+		return false, errors.New("could not find game")
 	}
 	temp := result.Opponents[0].Accepted
 	return temp != "", nil

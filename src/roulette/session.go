@@ -34,21 +34,16 @@ func GameStart(s *d.GameSettings) string {
 func ChallengeAccept(channel string, user *discordgo.User) string {
 	err := db.AcceptPlayer(channel, user)
 	if err != nil {
-		return "<@" + user.ID + "> Could not accept: Game not found"
+		return "<@" + user.ID + "> Could not accept: " + err.Error()
 	}
 	return "<@" + user.ID + "> has accepted!!"
 }
 
 func ChallengeDeny(channel string, user *discordgo.User) string {
-	resp := GameEnd(channel)
-	return "<@" + user.ID + "> has denied!!\n" + resp
-}
-
-func GameEnd(channel string) string {
 	resp := fmt.Sprintf("Putting gun away\nThe winner is: %s in %s", "Winner", channel)
 	if err := db.DeleteGameDocument(channel); err != nil {
 		log.Printf("Error removing game: %v", err)
 		resp = fmt.Sprintf("Error: %v", err)
 	}
-	return resp
+	return "<@" + user.ID + "> has denied!!\n" + resp
 }
