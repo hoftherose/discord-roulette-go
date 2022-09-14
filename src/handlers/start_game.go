@@ -47,8 +47,8 @@ func getSettingsFromOptions(
 	return settings
 }
 
-var RouletteHandle = Handler{
-	&discordgo.ApplicationCommand{
+var RouletteHandle = d.Handler{
+	CommandSpecs: &discordgo.ApplicationCommand{
 		Name:                     "roulette-start",
 		Description:              "Roulette start game",
 		DefaultMemberPermissions: &defaultAdmin,
@@ -91,7 +91,7 @@ var RouletteHandle = Handler{
 			},
 		},
 	},
-	func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	CommandHandler: func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		options := i.ApplicationCommandData().Options
 		challenger := i.Member.User
 		settings := getSettingsFromOptions(s, options, challenger, i.ChannelID)

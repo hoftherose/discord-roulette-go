@@ -2,16 +2,17 @@ package handlers
 
 import (
 	"github.com/bwmarrin/discordgo"
+	"github.com/holy-tech/discord-roulette/src/data"
 	r "github.com/holy-tech/discord-roulette/src/roulette"
 )
 
-var AcceptHandle = Handler{
-	&discordgo.ApplicationCommand{
+var AcceptHandle = data.Handler{
+	CommandSpecs: &discordgo.ApplicationCommand{
 		Name:                     "roulette-accept",
 		Description:              "Accept roulette match",
 		DefaultMemberPermissions: &defaultAdmin,
 	},
-	func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	CommandHandler: func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		challenger := i.Member.User
 		channel := i.ChannelID
 		s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
@@ -23,13 +24,13 @@ var AcceptHandle = Handler{
 	},
 }
 
-var DenyHandle = Handler{
-	&discordgo.ApplicationCommand{
+var DenyHandle = data.Handler{
+	CommandSpecs: &discordgo.ApplicationCommand{
 		Name:                     "roulette-deny",
 		Description:              "Deny roulette match",
 		DefaultMemberPermissions: &defaultAdmin,
 	},
-	func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	CommandHandler: func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		challenger := i.Member.User
 		channel := i.ChannelID
 		s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
