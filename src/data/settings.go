@@ -1,6 +1,8 @@
 package data
 
 import (
+	"errors"
+
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -42,4 +44,17 @@ var DefaultGameSettings GameSettings = GameSettings{
 
 func (s GameSettings) GetCurrentPlayer() string {
 	return s.TableState.Turns[0]
+}
+
+func (s GameSettings) Shoot(user *discordgo.User) (bool, error) {
+	curr_player := s.GetCurrentPlayer()
+	if user.ID != curr_player {
+		return false, errors.New("it is not your turn")
+	}
+	died := true
+	// if died {
+
+	// 	s.TableState.Losers = append(s.TableState.Losers, )
+	// }
+	return died, nil
 }
