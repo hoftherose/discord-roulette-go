@@ -53,14 +53,18 @@ func (s *GameSettings) SetNextPlayer() {
 	s.TableState.CurrentTurn = s.TableState.CurrentTurn % len(s.TableState.Turns)
 }
 
+func (s *GameSettings) SetNextChamber() {
+	curr_chamber := s.GunState.CurrentChamber
+	s.GunState.CurrentChamber = (curr_chamber + 1) % s.GunState.NumChamber
+}
+
 func (s *GameSettings) Shoot(user *discordgo.User) (bool, error) {
 	curr_player := s.GetCurrentPlayer()
 	if user.ID != curr_player {
 		return false, errors.New("it is not your turn")
 	}
-	curr_chamber := s.GunState.CurrentChamber
-	died := s.GunState.Chambers[curr_chamber]
-	s.GunState.CurrentChamber = (curr_chamber + 1) % s.GunState.NumChamber
+	died := s.GunState.Chambers[s.GunState.CurrentChamber]
+	s.SetNextChamber()
 	if died {
 		// TODO Setup actual loser table
 		s.TableState.Losers = append(s.TableState.Losers, true)
