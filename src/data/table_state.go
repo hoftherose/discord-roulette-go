@@ -1,5 +1,9 @@
 package data
 
+import (
+	"math/rand"
+)
+
 var (
 	DefaultChamber        []bool = []bool{}
 	DefaultNumChamber     int    = 6
@@ -19,4 +23,17 @@ var DefaultGunState GunState = GunState{
 	DefaultNumChamber,
 	DefaultNumBullet,
 	DefaultCurrentChamber,
+}
+
+func (t *TableState) GetCurrentPlayer() string {
+	curr_player := t.CurrentTurn
+	return t.Turns[curr_player]
+}
+
+func (t *TableState) SetNextPlayer() {
+	t.CurrentTurn = (t.CurrentTurn + 1) % len(t.Turns)
+}
+
+func (t *TableState) SpinTable() {
+	rand.Shuffle(len(t.Turns), func(i, j int) { t.Turns[i], t.Turns[j] = t.Turns[j], t.Turns[i] })
 }
