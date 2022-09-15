@@ -6,7 +6,6 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	u "github.com/holy-tech/discord-roulette/src"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 func AcceptPlayer(channel string, user *discordgo.User) error {
@@ -26,7 +25,7 @@ func AcceptPlayer(channel string, user *discordgo.User) error {
 			break
 		}
 	}
-	err = UpdateGameDocument(bson.M{"channel": channel}, result, channel)
+	err = UpdateGameDocument(channel, result)
 	if err != nil {
 		return err
 	}

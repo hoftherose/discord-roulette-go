@@ -8,10 +8,12 @@ import (
 	db "github.com/holy-tech/discord-roulette/src/repo"
 )
 
-func Shoot(s data.GameSettings) (bool, error) {
+func Shoot(s data.GameSettings, user *discordgo.User) (bool, error) {
+	// GetCurrentPlayer(s)
 	died := rand.Intn(int(s.GunState.NumChamber)) > int(s.GunState.NumBullets)
 	// if died {
-	// 	s.TableState.Losers[]
+
+	// 	s.TableState.Losers = append(s.TableState.Losers, )
 	// }
 	return died, nil
 }
@@ -25,7 +27,7 @@ func ShootTurn(channel string, user *discordgo.User) string {
 	if !accepted {
 		return "Game still is not accepted"
 	}
-	died, _ := Shoot(settings)
+	died, _ := Shoot(settings, user)
 	if died {
 		return "You died <@" + user.ID + ">"
 	}

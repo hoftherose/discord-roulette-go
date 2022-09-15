@@ -57,7 +57,7 @@ func GetGameDocument(channel string) (d.GameSettings, error) {
 	return result, enc_result.Err()
 }
 
-func UpdateGameDocument(filter interface{}, new interface{}, channel string) error {
+func UpdateGameDocument(channel string, new interface{}) error {
 	db := Client.Database("games")
 	gameCollection := db.Collection(fmt.Sprintf("%s_game", channel))
 	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)
@@ -76,7 +76,7 @@ func UpdateGameDocument(filter interface{}, new interface{}, channel string) err
 func AcceptGame(channel string) error {
 	result, _ := GetGameDocument(channel)
 	result.GameAccepted = true
-	err := UpdateGameDocument(bson.M{"channel": channel}, result, channel)
+	err := UpdateGameDocument(channel, result)
 	return err
 }
 
