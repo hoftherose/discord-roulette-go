@@ -1,17 +1,17 @@
 package data
 
 var (
-	DefaultLosers      []bool
-	DefaultCurrentTurn int64 = 0
+	DefaultLosers []bool   = []bool{}
+	DefaultTurns  []string = []string{}
 
-	DefaultChamber    []bool
-	DefaultNumChamber int64 = 6
-	DefaultNumBullet  int64 = 1
+	DefaultChamber    []bool = []bool{}
+	DefaultNumChamber int64  = 6
+	DefaultNumBullet  int64  = 1
 )
 
 type TableState struct {
-	Losers      []bool `json:"losers"`
-	CurrentTurn int64  `json:"current_turn"`
+	Losers []bool   `json:"losers"`
+	Turns  []string `json:"current_turn"`
 }
 
 type GunState struct {
@@ -22,7 +22,7 @@ type GunState struct {
 
 var DefaultTableState TableState = TableState{
 	DefaultLosers,
-	DefaultCurrentTurn,
+	DefaultTurns,
 }
 
 var DefaultGunState GunState = GunState{
