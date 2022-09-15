@@ -2,7 +2,6 @@ package data
 
 import (
 	"math/rand"
-	"time"
 )
 
 var (
@@ -23,18 +22,15 @@ var DefaultTableState TableState = TableState{
 	DefaultCurrentTurn,
 }
 
-func (g *GunState) SetNextChamber() {
-	curr_chamber := g.CurrentChamber
-	g.CurrentChamber = (curr_chamber + 1) % g.NumChamber
+func (t *TableState) GetCurrentPlayer() string {
+	curr_player := t.CurrentTurn
+	return t.Turns[curr_player]
 }
 
-func (g *GunState) SpinChamber() {
-	g.Chambers = make([]bool, g.NumChamber)
-	for k := 0; k < g.NumChamber; k++ {
-		g.Chambers[k] = k < g.NumBullets
-	}
-	rand.Seed(time.Now().UnixNano())
-	rand.Shuffle(len(g.Chambers), func(i, j int) {
-		g.Chambers[i], g.Chambers[j] = g.Chambers[j], g.Chambers[i]
-	})
+func (t *TableState) SetNextPlayer() {
+	t.CurrentTurn = (t.CurrentTurn + 1) % len(t.Turns)
+}
+
+func (t *TableState) SpinTable() {
+	rand.Shuffle(len(t.Turns), func(i, j int) { t.Turns[i], t.Turns[j] = t.Turns[j], t.Turns[i] })
 }
