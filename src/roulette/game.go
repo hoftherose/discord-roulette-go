@@ -10,11 +10,12 @@ func ShootTurn(channel string, user *discordgo.User) string {
 	if err != nil {
 		return "No shots fired: " + err.Error()
 	}
-	settings, _ := db.GetGameDocument(channel)
+	game, _ := db.GetGameDocument(channel)
 	if !accepted {
 		return "Game still is not accepted"
 	}
-	died, err := settings.Shoot(user)
+	died, err := game.Shoot(user)
+	db.UpdateGameDocument(channel, game)
 	if err != nil {
 		return "Error: " + err.Error()
 	} else if died {

@@ -42,19 +42,21 @@ var DefaultGameSettings GameSettings = GameSettings{
 	DefaultChannel,
 }
 
-func (s GameSettings) GetCurrentPlayer() string {
+func (s *GameSettings) GetCurrentPlayer() string {
 	return s.TableState.Turns[0]
 }
 
-func (s GameSettings) Shoot(user *discordgo.User) (bool, error) {
+func (s *GameSettings) Shoot(user *discordgo.User) (bool, error) {
 	curr_player := s.GetCurrentPlayer()
 	if user.ID != curr_player {
 		return false, errors.New("it is not your turn")
 	}
-	died := true
-	// if died {
-
-	// 	s.TableState.Losers = append(s.TableState.Losers, )
-	// }
+	curr_chamber := s.GunState.CurrentChamber
+	died := s.GunState.Chambers[curr_chamber]
+	s.GunState.CurrentChamber = (curr_chamber + 1) % int64(s.GunState.NumChamber)
+	if died {
+		// TODO Setup actual loser table
+		s.TableState.Losers = append(s.TableState.Losers, true)
+	}
 	return died, nil
 }
