@@ -65,3 +65,15 @@ func (s *GameSettings) Shoot(user *discordgo.User) (bool, error) {
 	}
 	return died, nil
 }
+
+func (s *GameSettings) SpinChamber() {
+	var k int64
+	s.GunState.Chambers = make([]bool, s.GunState.NumChamber)
+	for k = 0; k < s.GunState.NumChamber; k++ {
+		s.GunState.Chambers[k] = k < s.GunState.NumBullets
+	}
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(len(s.GunState.Chambers), func(i, j int) {
+		s.GunState.Chambers[i], s.GunState.Chambers[j] = s.GunState.Chambers[j], s.GunState.Chambers[i]
+	})
+}
