@@ -43,7 +43,12 @@ var DefaultGameSettings GameSettings = GameSettings{
 }
 
 func (s *GameSettings) GetCurrentPlayer() string {
-	return s.TableState.Turns[0]
+	curr_player := s.TableState.CurrentTurn
+	return s.TableState.Turns[curr_player]
+}
+
+func (s *GameSettings) SetNextPlayer() {
+	s.TableState.CurrentTurn = s.TableState.CurrentTurn % int64(len(s.TableState.Turns))
 }
 
 func (s *GameSettings) Shoot(user *discordgo.User) (bool, error) {
