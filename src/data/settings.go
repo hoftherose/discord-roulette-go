@@ -50,7 +50,7 @@ func (s *GameSettings) GetCurrentPlayer() string {
 }
 
 func (s *GameSettings) SetNextPlayer() {
-	s.TableState.CurrentTurn = s.TableState.CurrentTurn % int64(len(s.TableState.Turns))
+	s.TableState.CurrentTurn = s.TableState.CurrentTurn % len(s.TableState.Turns)
 }
 
 func (s *GameSettings) Shoot(user *discordgo.User) (bool, error) {
@@ -60,7 +60,7 @@ func (s *GameSettings) Shoot(user *discordgo.User) (bool, error) {
 	}
 	curr_chamber := s.GunState.CurrentChamber
 	died := s.GunState.Chambers[curr_chamber]
-	s.GunState.CurrentChamber = (curr_chamber + 1) % int64(s.GunState.NumChamber)
+	s.GunState.CurrentChamber = (curr_chamber + 1) % s.GunState.NumChamber
 	if died {
 		// TODO Setup actual loser table
 		s.TableState.Losers = append(s.TableState.Losers, true)
@@ -69,9 +69,8 @@ func (s *GameSettings) Shoot(user *discordgo.User) (bool, error) {
 }
 
 func (s *GameSettings) SpinChamber() {
-	var k int64
 	s.GunState.Chambers = make([]bool, s.GunState.NumChamber)
-	for k = 0; k < s.GunState.NumChamber; k++ {
+	for k := 0; k < s.GunState.NumChamber; k++ {
 		s.GunState.Chambers[k] = k < s.GunState.NumBullets
 	}
 	rand.Seed(time.Now().UnixNano())
