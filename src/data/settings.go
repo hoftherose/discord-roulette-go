@@ -23,14 +23,14 @@ type Player struct {
 }
 
 type GameSettings struct {
-	Opponents             map[string]Player `json:"opponent,omitempty"`
-	TableState            TableState        `json:"num_chambers,omitempty"`
-	GunState              GunState          `json:"num_bullets,omitempty"`
-	GameAccepted          bool              `json:"game_accepted,omitempty"`
-	SpinChamberRule       bool              `json:"spin_chamber,omitempty"`
-	SpinChamberOnShotRule bool              `json:"spin_chamber_on_shot,omitempty"`
-	ReplaceBulletRule     bool              `json:"replace_bullet,omitempty"`
-	Channel               string            `json:"channel,omitempty"`
+	Opponents             map[string]Player
+	TableState            TableState
+	GunState              GunState
+	GameAccepted          bool   `json:"game_accepted,omitempty"`
+	SpinChamberRule       bool   `json:"spin_chamber,omitempty"`
+	SpinChamberOnShotRule bool   `json:"spin_chamber_on_shot,omitempty"`
+	ReplaceBulletRule     bool   `json:"replace_bullet,omitempty"`
+	Channel               string `json:"channel,omitempty"`
 }
 
 var DefaultGameSettings GameSettings = GameSettings{
@@ -44,27 +44,27 @@ var DefaultGameSettings GameSettings = GameSettings{
 	DefaultChannel,
 }
 
-func (s *GameSettings) GetCurrentPlayer() string {
-	curr_player := s.TableState.CurrentTurn
-	return s.TableState.Turns[curr_player]
+func (t *TableState) GetCurrentPlayer() string {
+	curr_player := t.CurrentTurn
+	return t.Turns[curr_player]
 }
 
-func (s *GameSettings) SetNextPlayer() {
-	s.TableState.CurrentTurn = s.TableState.CurrentTurn % len(s.TableState.Turns)
+func (t *TableState) SetNextPlayer() {
+	t.CurrentTurn = t.CurrentTurn % len(t.Turns)
 }
 
-func (s *GameSettings) SetNextChamber() {
-	curr_chamber := s.GunState.CurrentChamber
-	s.GunState.CurrentChamber = (curr_chamber + 1) % s.GunState.NumChamber
+func (g *GunState) SetNextChamber() {
+	curr_chamber := g.CurrentChamber
+	g.CurrentChamber = (curr_chamber + 1) % g.NumChamber
 }
 
 func (s *GameSettings) Shoot(user *discordgo.User) (bool, error) {
-	curr_player := s.GetCurrentPlayer()
+	curr_player := s.TableState.GetCurrentPlayer()
 	if user.ID != curr_player {
 		return false, errors.New("it is not your turn")
 	}
 	died := s.GunState.Chambers[s.GunState.CurrentChamber]
-	s.SetNextChamber()
+	s.GunState.SetNextChamber()
 	if died {
 		// TODO Setup actual loser table
 		s.TableState.Losers = append(s.TableState.Losers, true)
@@ -72,13 +72,13 @@ func (s *GameSettings) Shoot(user *discordgo.User) (bool, error) {
 	return died, nil
 }
 
-func (s *GameSettings) SpinChamber() {
-	s.GunState.Chambers = make([]bool, s.GunState.NumChamber)
-	for k := 0; k < s.GunState.NumChamber; k++ {
-		s.GunState.Chambers[k] = k < s.GunState.NumBullets
+func (g *GunState) SpinChamber() {
+	g.Chambers = make([]bool, g.NumChamber)
+	for k := 0; k < g.NumChamber; k++ {
+		g.Chambers[k] = k < g.NumBullets
 	}
 	rand.Seed(time.Now().UnixNano())
-	rand.Shuffle(len(s.GunState.Chambers), func(i, j int) {
-		s.GunState.Chambers[i], s.GunState.Chambers[j] = s.GunState.Chambers[j], s.GunState.Chambers[i]
+	rand.Shuffle(len(g.Chambers), func(i, j int) {
+		g.Chambers[i], g.Chambers[j] = g.Chambers[j], g.Chambers[i]
 	})
 }

@@ -13,6 +13,6 @@ func SetTable(channel string) {
 		i++
 	}
 	// TODO Set random seating
-	s.SpinChamber()
+	s.GunState.SpinChamber()
 	db.UpdateGameDocument(channel, s)
 }
