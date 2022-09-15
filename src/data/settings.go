@@ -39,3 +39,7 @@ var DefaultGameSettings GameSettings = GameSettings{
 	DefaultReplaceBullet,
 	DefaultChannel,
 }
+
+func (s GameSettings) GetCurrentPlayer() string {
+	return s.TableState.Turns[0]
+}
