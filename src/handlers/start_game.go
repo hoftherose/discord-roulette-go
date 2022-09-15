@@ -34,13 +34,13 @@ func getSettingsFromOptions(
 			settings.GunState.NumBullets = numBulletValue.IntValue()
 		}
 		if spinChamberValue, ok := optionMap["spin_chamber"]; ok {
-			settings.SpinChamber = spinChamberValue.BoolValue()
+			settings.SpinChamberRule = spinChamberValue.BoolValue()
 		}
 		if spinChamberOnShotValue, ok := optionMap["spin_chamber_on_shot"]; ok {
-			settings.SpinChamberOnShot = spinChamberOnShotValue.BoolValue()
+			settings.SpinChamberOnShotRule = spinChamberOnShotValue.BoolValue()
 		}
 		if replaceBulletValue, ok := optionMap["replace_bullets"]; ok {
-			settings.ReplaceBullet = replaceBulletValue.BoolValue()
+			settings.ReplaceBulletRule = replaceBulletValue.BoolValue()
 		}
 		settings.Channel = channel
 	}
@@ -73,19 +73,19 @@ var RouletteHandle = d.Handler{
 			},
 			{
 				Name:        "spin_chamber",
-				Description: fmt.Sprintf("Spin chamber after pulling trigger, defaults to %t", d.DefaultSpinChamber),
+				Description: fmt.Sprintf("Spin chamber after pulling trigger, defaults to %t", d.DefaultSpinChamberRule),
 				Type:        discordgo.ApplicationCommandOptionBoolean,
 				Required:    false,
 			},
 			{
 				Name:        "spin_chamber_on_shot",
-				Description: fmt.Sprintf("Spin chamber after gun fires, defaults to %t", d.DefaultSpinChamberOnShot),
+				Description: fmt.Sprintf("Spin chamber after gun fires, defaults to %t", d.DefaultSpinChamberOnShotRule),
 				Type:        discordgo.ApplicationCommandOptionBoolean,
 				Required:    false,
 			},
 			{
 				Name:        "replace_bullets",
-				Description: fmt.Sprintf("Replace bullets if gun fires, defaults to %t", d.DefaultReplaceBullet),
+				Description: fmt.Sprintf("Replace bullets if gun fires, defaults to %t", d.DefaultReplaceBulletRule),
 				Type:        discordgo.ApplicationCommandOptionBoolean,
 				Required:    false,
 			},
