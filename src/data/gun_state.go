@@ -44,3 +44,12 @@ func (g *GunState) SpinChamber() {
 		g.Chambers[i], g.Chambers[j] = g.Chambers[j], g.Chambers[i]
 	})
 }
+
+func (g *GunState) CountBullets(shot bool) {
+	if shot {
+		g.NumBulletsLeft--
+	}
+	if g.NumBulletsLeft <= 0 {
+		g.SpinChamber()
+	}
+}
