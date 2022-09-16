@@ -5,13 +5,13 @@ import (
 )
 
 var (
-	DefaultLosers      []bool   = []bool{}
+	DefaultLosers      []string = []string{}
 	DefaultTurns       []string = []string{}
 	DefaultCurrentTurn int      = 0
 )
 
 type TableState struct {
-	Losers      []bool   `json:"losers"`
+	Losers      []string `json:"losers"`
 	Turns       []string `json:"turns"`
 	CurrentTurn int      `json:"current_turn"`
 }

@@ -51,8 +51,8 @@ func (s *GameSettings) Shoot(user *discordgo.User) (bool, error) {
 	s.GunState.SetNextChamber()
 	s.TableState.SetNextPlayer()
 	if died {
-		// TODO Setup actual loser table
-		s.TableState.Losers = append(s.TableState.Losers, true)
+		s.TableState.Losers = append(s.TableState.Losers, user.ID)
+		delete(s.Opponents, user.ID)
 	}
 	return died, nil
 }
