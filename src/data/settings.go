@@ -53,6 +53,10 @@ func (s *GameSettings) Shoot(user *discordgo.User) (bool, error) {
 	if shot {
 		s.TableState.Losers = append(s.TableState.Losers, user.ID)
 		delete(s.Opponents, user.ID)
+		s.GunState.NumBulletsLeft--
+	}
+	if s.GunState.NumBulletsLeft <= 0 {
+		s.GunState.SpinChamber()
 	}
 	return shot, nil
 }
