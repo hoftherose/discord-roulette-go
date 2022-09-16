@@ -47,12 +47,12 @@ func (s *GameSettings) Shoot(user *discordgo.User) (bool, error) {
 	if user.ID != curr_player {
 		return false, errors.New("it is not your turn")
 	}
-	died := s.GunState.Chambers[s.GunState.CurrentChamber]
+	shot := s.GunState.Chambers[s.GunState.CurrentChamber]
 	s.GunState.SetNextChamber()
 	s.TableState.SetNextPlayer()
-	if died {
+	if shot {
 		s.TableState.Losers = append(s.TableState.Losers, user.ID)
 		delete(s.Opponents, user.ID)
 	}
-	return died, nil
+	return shot, nil
 }

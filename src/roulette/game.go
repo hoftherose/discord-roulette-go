@@ -14,11 +14,11 @@ func ShootTurn(channel string, user *discordgo.User) string {
 	if !accepted {
 		return "Game still is not accepted"
 	}
-	died, err := game.Shoot(user)
+	shot, err := game.Shoot(user)
 	db.UpdateGameDocument(channel, game)
 	if err != nil {
 		return "Error: " + err.Error()
-	} else if died {
+	} else if shot {
 		return "You died <@" + user.ID + ">"
 	}
 	return "You live <@" + user.ID + ">"
