@@ -52,3 +52,13 @@ func AwaitingPlayer(channel string) (string, bool) {
 	}
 	return "Still waiting for <@" + u.JoinStrings(">, <@", awaitingPlayers...) + ">", false
 }
+
+func GetCurrentPlayer(channel string) string {
+	settings, err := GetGameDocument(channel)
+	if err != nil {
+		log.Fatalf("Could not get game: %v", err)
+	}
+	currentSeat := settings.TableState.CurrentTurn
+	currentPlayer := settings.TableState.Turns[currentSeat]
+	return "<@" + currentPlayer + ">"
+}
