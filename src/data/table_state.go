@@ -34,3 +34,7 @@ func (t *TableState) SetNextPlayer() {
 func (t *TableState) SpinTable() {
 	rand.Shuffle(len(t.Turns), func(i, j int) { t.Turns[i], t.Turns[j] = t.Turns[j], t.Turns[i] })
 }
+
+func (t *TableState) Ongoing() bool {
+	return len(t.Turns) > 1
+}
