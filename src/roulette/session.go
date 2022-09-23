@@ -47,7 +47,7 @@ func ChallengeAccept(channel string, user *discordgo.User) string {
 }
 
 func ChallengeDeny(channel string, user *discordgo.User) string {
-	resp := fmt.Sprintf("Putting gun away\nThe winner is: %s in %s", "Winner", channel)
+	resp := "Putting gun away"
 	if err := db.DeleteGameDocument(channel); err != nil {
 		log.Printf("Error removing game: %v", err)
 		resp = fmt.Sprintf("Error: %v", err)
