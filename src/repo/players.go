@@ -58,7 +58,5 @@ func GetCurrentPlayer(channel string) string {
 	if err != nil {
 		log.Fatalf("Could not get game: %v", err)
 	}
-	currentSeat := settings.TableState.CurrentTurn
-	currentPlayer := settings.TableState.Turns[currentSeat]
-	return "<@" + currentPlayer + ">"
+	return settings.TableState.GetCurrentPlayer()
 }

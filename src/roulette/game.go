@@ -25,5 +25,5 @@ func ShootTurn(channel string, user *discordgo.User) string {
 	} else {
 		message = "You live <@" + user.ID + ">"
 	}
-	return message + "\nIt is " + db.GetCurrentPlayer(channel) + "turn."
+	return message + "\nIt is <@" + game.TableState.GetCurrentPlayer() + "> turn."
 }
