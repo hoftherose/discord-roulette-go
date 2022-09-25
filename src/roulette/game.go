@@ -5,6 +5,11 @@ import (
 	db "github.com/holy-tech/discord-roulette/src/repo"
 )
 
+func GetGameInfo(channel string) string {
+	result, _ := db.GetGameDocument(channel)
+	return "Info" + result.Channel
+}
+
 func ShootTurn(channel string, user *discordgo.User) string {
 	accepted, err := db.GameIsAccepted(channel)
 	if err != nil {
