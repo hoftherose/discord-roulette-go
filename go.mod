@@ -3,6 +3,7 @@ module github.com/holy-tech/discord-roulette
 go 1.19
 
 require (
+	github.com/Clinet/discordgo-embed v0.0.0-20220113222025-bafe0c917646
 	github.com/bwmarrin/discordgo v0.26.1
 	go.mongodb.org/mongo-driver v1.10.2
 )
