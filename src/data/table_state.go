@@ -38,3 +38,13 @@ func (t *TableState) SpinTable() {
 func (t *TableState) Ongoing() bool {
 	return len(t.Turns) > 1
 }
+
+func (t *TableState) RemovePlayer(user string) error {
+	for i, player := range t.Turns {
+		if player != user {
+			continue
+		}
+		t.Turns = append(t.Turns[i+1:], t.Turns[:i]...)
+		t.CurrentTurn = 0
+	}
+}

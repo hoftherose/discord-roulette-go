@@ -53,6 +53,7 @@ func (s *GameSettings) Shoot(user *discordgo.User) (bool, error) {
 	if shot {
 		s.TableState.Losers = append(s.TableState.Losers, user.ID)
 		delete(s.Opponents, user.ID)
+		s.TableState.RemovePlayer(user.ID)
 	}
 	s.GunState.CountBullets(shot)
 	return shot, nil
