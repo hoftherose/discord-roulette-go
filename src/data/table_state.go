@@ -1,6 +1,7 @@
 package data
 
 import (
+	"errors"
 	"math/rand"
 )
 
@@ -46,5 +47,7 @@ func (t *TableState) RemovePlayer(user string) error {
 		}
 		t.Turns = append(t.Turns[i+1:], t.Turns[:i]...)
 		t.CurrentTurn = 0
+		return nil
 	}
+	return errors.New("Player <@" + user + "> not found")
 }
