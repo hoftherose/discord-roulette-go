@@ -33,5 +33,6 @@ func ShootTurn(channel string, user *discordgo.User) string {
 	if game.TableState.Ongoing() {
 		return message + "\nIt is <@" + game.TableState.GetCurrentPlayer() + "> turn."
 	}
+	db.DeleteGameDocument(channel)
 	return message + "\nThe winner is: <@" + game.TableState.Turns[0] + ">"
 }
