@@ -40,8 +40,8 @@ func ChallengeAccept(channel string, user *discordgo.User) string {
 	}
 	message, ready := db.AwaitingPlayer(channel)
 	if ready {
-		message += "\nIt is <@" + db.GetCurrentPlayer(channel) + "> turn."
 		SetTable(channel)
+		message += "\nIt is <@" + db.GetCurrentPlayer(channel) + "> turn."
 	}
 	return "<@" + user.ID + "> has accepted!!\n" + message
 }
