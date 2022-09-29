@@ -29,7 +29,7 @@ metadata:
 spec:
   steps:
     - name: yaml-updater
-      image: kubectl
+      image: bitnami/kubectl
       script: |
         #!/bin/sh
         kubectl get nodes
