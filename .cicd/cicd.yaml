@@ -23,6 +23,28 @@ spec:
         echo "Goodbye World!"
 ---
 apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: yaml-updater
+spec:
+  steps:
+    - name: yaml-updater
+      image: kubectl
+      script: |
+        #!/bin/sh
+        kubectl get nodes
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: get-nodes
+spec:
+  tasks:
+  - name: yaml-updater
+    taskRef:
+      name: yaml-updater
+---
+apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: full-meeting
@@ -47,7 +69,7 @@ spec:
   frequency: 1m
   type: github
   pipelineRef:
-    name: full-meeting
+    name: get-nodes
 ---
 apiVersion: v1
 kind: Namespace
