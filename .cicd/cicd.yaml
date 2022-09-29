@@ -65,7 +65,7 @@ metadata:
     name: test
 spec:
   url: https://github.com/holy-tech/discord-roulette.git
-  ref: cicd-tekton
+  ref: feat/cicd-tekton
   frequency: 1m
   type: github
   pipelineRef:
