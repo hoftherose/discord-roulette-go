@@ -1,0 +1,57 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: hello
+spec:
+  steps:
+    - name: echo
+      image: alpine
+      script: |
+        #!/bin/sh
+        echo "Hello World"
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: goodbye
+spec:
+  steps:
+    - name: goodbye
+      image: alpine
+      script: |
+        #!/bin/sh
+        echo "Goodbye World!"
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: full-meeting
+spec:
+  tasks:
+  - name: say-hello
+    taskRef:
+      name: hello
+  - name: say-goodbye
+    taskRef:
+      name: goodbye
+---
+apiVersion: polling.tekton.dev/v1alpha1
+kind: Repository
+metadata:
+  name: github-listener
+  labels:
+    name: test
+spec:
+  url: https://github.com/holy-tech/discord-roulette.git
+  ref: cicd-tekton
+  frequency: 1m
+  type: github
+  pipelineRef:
+    name: full-meeting
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: repo-pipeline
+  labels:
+    env: test
