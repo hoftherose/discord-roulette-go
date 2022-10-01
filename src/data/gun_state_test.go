@@ -9,8 +9,8 @@ import (
 
 func TestSetNextChamber(t *testing.T) {
 	var tests = []struct {
-		num_chamber, curr_chamber int
-		expected                  int
+		numChamber, currChamber int
+		expected                int
 	}{
 		{6, 0, 1},
 		{6, 4, 5},
@@ -20,11 +20,11 @@ func TestSetNextChamber(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		testname := fmt.Sprintf("%d,%d", tt.num_chamber, tt.curr_chamber)
+		testname := fmt.Sprintf("%d,%d", tt.numChamber, tt.currChamber)
 		t.Run(testname, func(t *testing.T) {
 			gstate := data.GunState{
-				NumChamber:     tt.num_chamber,
-				CurrentChamber: tt.curr_chamber,
+				NumChamber:     tt.numChamber,
+				CurrentChamber: tt.currChamber,
 			}
 			gstate.SetNextChamber()
 			if gstate.CurrentChamber != tt.expected {

@@ -30,8 +30,7 @@ var DefaultGunState GunState = GunState{
 }
 
 func (g *GunState) SetNextChamber() {
-	curr_chamber := g.CurrentChamber
-	g.CurrentChamber = (curr_chamber + 1) % g.NumChamber
+	g.CurrentChamber = (g.CurrentChamber + 1) % g.NumChamber
 }
 
 func (g *GunState) SpinChamber() {
