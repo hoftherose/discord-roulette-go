@@ -24,8 +24,8 @@ var DefaultTableState TableState = TableState{
 }
 
 func (t *TableState) GetCurrentPlayer() string {
-	curr_player := t.CurrentTurn
-	return t.Turns[curr_player]
+	currPlayer := t.CurrentTurn
+	return t.Turns[currPlayer]
 }
 
 func (t *TableState) SetNextPlayer() {
