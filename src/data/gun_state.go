@@ -33,12 +33,15 @@ func (g *GunState) SetNextChamber() {
 	g.CurrentChamber = (g.CurrentChamber + 1) % g.NumChamber
 }
 
-func (g *GunState) SpinChamber() {
+func (g *GunState) SpinChamber(seed int64) {
+	if seed == 0 {
+		seed = time.Now().UnixNano()
+	}
 	g.Chambers = make([]bool, g.NumChamber)
 	for k := 0; k < g.NumChamber; k++ {
 		g.Chambers[k] = k < g.NumBullets
 	}
-	rand.Seed(time.Now().UnixNano())
+	rand.Seed(seed)
 	rand.Shuffle(len(g.Chambers), func(i, j int) {
 		g.Chambers[i], g.Chambers[j] = g.Chambers[j], g.Chambers[i]
 	})
