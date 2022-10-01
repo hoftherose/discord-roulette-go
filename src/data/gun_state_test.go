@@ -33,3 +33,28 @@ func TestSetNextChamber(t *testing.T) {
 		})
 	}
 }
+
+func TestClearChamber(t *testing.T) {
+	var tests = []struct {
+		shot           bool
+		numBulletsLeft int
+		expected       int
+	}{
+		{true, 1, 0},
+		{false, 4, 4},
+		{true, 6, 5},
+	}
+
+	for _, tt := range tests {
+		testname := fmt.Sprintf("%v,%d", tt.shot, tt.numBulletsLeft)
+		t.Run(testname, func(t *testing.T) {
+			gstate := data.GunState{
+				NumBulletsLeft: tt.numBulletsLeft,
+			}
+			gstate.ClearChamber(tt.shot)
+			if gstate.NumBulletsLeft != tt.expected {
+				t.Errorf("got %d, want %d", gstate.NumBulletsLeft, tt.expected)
+			}
+		})
+	}
+}
