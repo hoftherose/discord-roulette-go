@@ -33,8 +33,9 @@ func (g *GunState) SetNextChamber() {
 	g.CurrentChamber = (g.CurrentChamber + 1) % g.NumChamber
 }
 
-func (g *GunState) SpinChamber(seed int64) {
-	if seed == 0 {
+func (g *GunState) SpinChamber(setRand bool) {
+	var seed int64 = 42
+	if setRand {
 		seed = time.Now().UnixNano()
 	}
 	g.Chambers = make([]bool, g.NumChamber)

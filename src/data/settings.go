@@ -57,7 +57,7 @@ func (s *GameSettings) Shoot(user *discordgo.User) (bool, error) {
 	}
 	s.GunState.ClearChamber(shot)
 	if s.GunState.NumBulletsLeft <= 0 {
-		s.GunState.SpinChamber()
+		s.GunState.SpinChamber(true)
 	}
 	return shot, nil
 }
