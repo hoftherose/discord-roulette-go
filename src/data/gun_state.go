@@ -30,26 +30,26 @@ var DefaultGunState GunState = GunState{
 }
 
 func (g *GunState) SetNextChamber() {
-	curr_chamber := g.CurrentChamber
-	g.CurrentChamber = (curr_chamber + 1) % g.NumChamber
+	g.CurrentChamber = (g.CurrentChamber + 1) % g.NumChamber
 }
 
-func (g *GunState) SpinChamber() {
+func (g *GunState) SpinChamber(setRand bool) {
+	var seed int64 = 42
+	if setRand {
+		seed = time.Now().UnixNano()
+	}
 	g.Chambers = make([]bool, g.NumChamber)
 	for k := 0; k < g.NumChamber; k++ {
 		g.Chambers[k] = k < g.NumBullets
 	}
-	rand.Seed(time.Now().UnixNano())
+	rand.Seed(seed)
 	rand.Shuffle(len(g.Chambers), func(i, j int) {
 		g.Chambers[i], g.Chambers[j] = g.Chambers[j], g.Chambers[i]
 	})
 }
 
-func (g *GunState) CountBullets(shot bool) {
+func (g *GunState) ClearChamber(shot bool) {
 	if shot {
 		g.NumBulletsLeft--
-	}
-	if g.NumBulletsLeft <= 0 {
-		g.SpinChamber()
 	}
 }

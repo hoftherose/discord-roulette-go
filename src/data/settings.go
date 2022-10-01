@@ -43,8 +43,8 @@ var DefaultGameSettings GameSettings = GameSettings{
 }
 
 func (s *GameSettings) Shoot(user *discordgo.User) (bool, error) {
-	curr_player := s.TableState.GetCurrentPlayer()
-	if user.ID != curr_player {
+	currPlayer := s.TableState.GetCurrentPlayer()
+	if user.ID != currPlayer {
 		return false, errors.New("it is not your turn")
 	}
 	shot := s.GunState.Chambers[s.GunState.CurrentChamber]
@@ -55,6 +55,9 @@ func (s *GameSettings) Shoot(user *discordgo.User) (bool, error) {
 		delete(s.Opponents, user.ID)
 		s.TableState.RemovePlayer(user.ID)
 	}
-	s.GunState.CountBullets(shot)
+	s.GunState.ClearChamber(shot)
+	if s.GunState.NumBulletsLeft <= 0 {
+		s.GunState.SpinChamber(true)
+	}
 	return shot, nil
 }

@@ -51,9 +51,9 @@ func GetGameDocument(channel string) (d.GameSettings, error) {
 	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelCtx()
 
-	enc_result := gameCollection.FindOne(ctx, bson.M{"channel": channel})
-	enc_result.Decode(&result)
-	return result, enc_result.Err()
+	encResult := gameCollection.FindOne(ctx, bson.M{"channel": channel})
+	encResult.Decode(&result)
+	return result, encResult.Err()
 }
 
 func UpdateGameDocument(channel string, new interface{}) error {
