@@ -22,7 +22,7 @@ func TestSetNextChamber(t *testing.T) {
 	for _, tt := range tests {
 		testname := fmt.Sprintf("%d,%d", tt.numChamber, tt.currChamber)
 		t.Run(testname, func(t *testing.T) {
-			gstate := data.GunState{
+			gstate := data.Revolver{
 				NumChamber:     tt.numChamber,
 				CurrentChamber: tt.currChamber,
 			}
@@ -50,7 +50,7 @@ func TestSpinChamber(t *testing.T) {
 	for _, tt := range tests {
 		testname := fmt.Sprintf("%v,%d", tt.numChamber, tt.numBullets)
 		t.Run(testname, func(t *testing.T) {
-			gstate := data.GunState{
+			gstate := data.Revolver{
 				NumBullets: tt.numBullets,
 				NumChamber: tt.numChamber,
 			}
@@ -83,7 +83,7 @@ func TestClearChamber(t *testing.T) {
 	for _, tt := range tests {
 		testname := fmt.Sprintf("%v,%d", tt.shot, tt.numBulletsLeft)
 		t.Run(testname, func(t *testing.T) {
-			gstate := data.GunState{
+			gstate := data.Revolver{
 				NumBulletsLeft: tt.numBulletsLeft,
 			}
 			gstate.ClearChamber(tt.shot)

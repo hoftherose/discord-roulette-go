@@ -13,7 +13,7 @@ var (
 	DefaultCurrentChamber int    = 0
 )
 
-type GunState struct {
+type Revolver struct {
 	Chambers       []bool `json:"chambers"`
 	NumChamber     int    `json:"num_chambers"`
 	NumBullets     int    `json:"num_bullets"`
@@ -21,7 +21,7 @@ type GunState struct {
 	CurrentChamber int    `json:"current_chamber"`
 }
 
-var DefaultGunState GunState = GunState{
+var DefaultRevolver Revolver = Revolver{
 	DefaultChamber,
 	DefaultNumChamber,
 	DefaultNumBullet,
@@ -29,11 +29,11 @@ var DefaultGunState GunState = GunState{
 	DefaultCurrentChamber,
 }
 
-func (g *GunState) SetNextChamber() {
+func (g *Revolver) SetNextChamber() {
 	g.CurrentChamber = (g.CurrentChamber + 1) % g.NumChamber
 }
 
-func (g *GunState) SpinChamber(setRand bool) {
+func (g *Revolver) SpinChamber(setRand bool) {
 	var seed int64 = 42
 	if setRand {
 		seed = time.Now().UnixNano()
@@ -48,7 +48,7 @@ func (g *GunState) SpinChamber(setRand bool) {
 	})
 }
 
-func (g *GunState) ClearChamber(shot bool) {
+func (g *Revolver) ClearChamber(shot bool) {
 	if shot {
 		g.NumBulletsLeft--
 	}

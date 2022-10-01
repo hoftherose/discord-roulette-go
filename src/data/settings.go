@@ -23,7 +23,7 @@ type Player struct {
 type GameSettings struct {
 	Opponents             map[string]Player
 	TableState            TableState
-	GunState              GunState
+	Revolver              Revolver
 	GameAccepted          bool   `json:"game_accepted,omitempty"`
 	SpinChamberRule       bool   `json:"spin_chamber,omitempty"`
 	SpinChamberOnShotRule bool   `json:"spin_chamber_on_shot,omitempty"`
@@ -34,7 +34,7 @@ type GameSettings struct {
 var DefaultGameSettings GameSettings = GameSettings{
 	DefaultOpponents,
 	DefaultTableState,
-	DefaultGunState,
+	DefaultRevolver,
 	DefaultGameAccepted,
 	DefaultSpinChamberRule,
 	DefaultSpinChamberOnShotRule,
@@ -47,17 +47,17 @@ func (s *GameSettings) Shoot(user *discordgo.User) (bool, error) {
 	if user.ID != currPlayer {
 		return false, errors.New("it is not your turn")
 	}
-	shot := s.GunState.Chambers[s.GunState.CurrentChamber]
-	s.GunState.SetNextChamber()
+	shot := s.Revolver.Chambers[s.Revolver.CurrentChamber]
+	s.Revolver.SetNextChamber()
 	s.TableState.SetNextPlayer()
 	if shot {
 		s.TableState.Losers = append(s.TableState.Losers, user.ID)
 		delete(s.Opponents, user.ID)
 		s.TableState.RemovePlayer(user.ID)
 	}
-	s.GunState.ClearChamber(shot)
-	if s.GunState.NumBulletsLeft <= 0 {
-		s.GunState.SpinChamber(true)
+	s.Revolver.ClearChamber(shot)
+	if s.Revolver.NumBulletsLeft <= 0 {
+		s.Revolver.SpinChamber(true)
 	}
 	return shot, nil
 }
