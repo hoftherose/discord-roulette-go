@@ -29,27 +29,27 @@ var DefaultRevolver Revolver = Revolver{
 	DefaultCurrentChamber,
 }
 
-func (g *Revolver) SetNextChamber() {
-	g.CurrentChamber = (g.CurrentChamber + 1) % g.NumChamber
+func (r *Revolver) SetNextChamber() {
+	r.CurrentChamber = (r.CurrentChamber + 1) % r.NumChamber
 }
 
-func (g *Revolver) SpinChamber(setRand bool) {
-	var seed int64 = 42
-	if setRand {
-		seed = time.Now().UnixNano()
+func (r *Revolver) SpinChamber() {
+	rand.Seed(r.getSeed())
+	r.Chambers = make([]bool, r.NumChamber)
+	for k := 0; k < r.NumChamber; k++ {
+		r.Chambers[k] = k < r.NumBullets
 	}
-	g.Chambers = make([]bool, g.NumChamber)
-	for k := 0; k < g.NumChamber; k++ {
-		g.Chambers[k] = k < g.NumBullets
-	}
-	rand.Seed(seed)
-	rand.Shuffle(len(g.Chambers), func(i, j int) {
-		g.Chambers[i], g.Chambers[j] = g.Chambers[j], g.Chambers[i]
+	rand.Shuffle(len(r.Chambers), func(i, j int) {
+		r.Chambers[i], r.Chambers[j] = r.Chambers[j], r.Chambers[i]
 	})
 }
 
-func (g *Revolver) ClearChamber(shot bool) {
+func (r *Revolver) ClearChamber(shot bool) {
 	if shot {
-		g.NumBulletsLeft--
+		r.NumBulletsLeft--
 	}
+}
+
+func (r *Revolver) getSeed() int64 {
+	return time.Now().UnixNano()
 }
