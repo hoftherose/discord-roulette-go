@@ -44,11 +44,8 @@ func (g *GunState) SpinChamber() {
 	})
 }
 
-func (g *GunState) CountBullets(shot bool) {
+func (g *GunState) ClearChamber(shot bool) {
 	if shot {
 		g.NumBulletsLeft--
-	}
-	if g.NumBulletsLeft <= 0 {
-		g.SpinChamber()
 	}
 }
