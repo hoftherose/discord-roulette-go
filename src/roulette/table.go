@@ -14,6 +14,6 @@ func SetTable(channel string) {
 	}
 
 	s.TableState.SpinTable()
-	s.GunState.SpinChamber()
+	s.GunState.SpinChamber(true)
 	db.UpdateGameDocument(channel, s)
 }
