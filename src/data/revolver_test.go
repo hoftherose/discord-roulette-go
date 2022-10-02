@@ -54,7 +54,7 @@ func TestSpinChamber(t *testing.T) {
 				NumBullets: tt.numBullets,
 				NumChamber: tt.numChamber,
 			}
-			gstate.SpinChamber(false)
+			gstate.SpinChamber()
 			if len(gstate.Chambers) != len(tt.expected) {
 				t.Errorf("diff size in got %v, and want %v", gstate.Chambers, tt.expected)
 				return
