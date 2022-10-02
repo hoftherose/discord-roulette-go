@@ -14,42 +14,79 @@ var (
 )
 
 type Revolver struct {
-	Chambers       []bool `json:"chambers"`
-	NumChamber     int    `json:"num_chambers"`
-	NumBullets     int    `json:"num_bullets"`
-	NumBulletsLeft int    `json:"num_bullets_left"`
-	CurrentChamber int    `json:"current_chamber"`
+	chamber        []bool `json:"chambers"`
+	numBulletsLeft int    `json:"num_bullets_left"`
+	currentChamber int    `json:"current_chamber"`
+	seed           int64
 }
 
 var DefaultRevolver Revolver = Revolver{
 	DefaultChamber,
-	DefaultNumChamber,
-	DefaultNumBullet,
 	DefaultNumBulletsLeft,
 	DefaultCurrentChamber,
+	0,
 }
 
-func (r *Revolver) SetNextChamber() {
-	r.CurrentChamber = (r.CurrentChamber + 1) % r.NumChamber
+func (r *Revolver) ReloadGun(sizeChamber, numBullets int) {
+	chamber := make([]bool, sizeChamber)
+	for i := range chamber {
+		chamber[i] = i < numBullets
+	}
+	r.SetSeed(time.Now().UnixNano())
 }
 
 func (r *Revolver) SpinChamber() {
-	rand.Seed(r.getSeed())
-	r.Chambers = make([]bool, r.NumChamber)
-	for k := 0; k < r.NumChamber; k++ {
-		r.Chambers[k] = k < r.NumBullets
-	}
-	rand.Shuffle(len(r.Chambers), func(i, j int) {
-		r.Chambers[i], r.Chambers[j] = r.Chambers[j], r.Chambers[i]
-	})
+	rand.Seed(r.Seed())
+	newStart := rand.Int() % len(r.Chamber())
+	chamber := r.Chamber()
+	r.SetChamber(
+		append(
+			chamber[newStart:],
+			chamber[:newStart]...,
+		),
+	)
 }
 
-func (r *Revolver) ClearChamber(shot bool) {
-	if shot {
-		r.NumBulletsLeft--
-	}
+func (r *Revolver) ShuffleChamber() {
+	//TODO write function
+	return
 }
 
-func (r *Revolver) getSeed() int64 {
-	return time.Now().UnixNano()
+func (r *Revolver) Shoot() bool {
+	//TODO write function
+	return true
+}
+
+func (r *Revolver) NumBulletsLeft() int {
+	//TODO write function
+	return 0
+}
+
+func (r *Revolver) ChamberSize() int {
+	//TODO write function
+	return 0
+}
+
+func (r *Revolver) Seed() int64 {
+	return r.seed
+}
+
+func (r *Revolver) SetSeed(seed int64) {
+	r.seed = seed
+}
+
+func (r *Revolver) CurrentChamber() int {
+	return r.currentChamber
+}
+
+func (r *Revolver) SetCurrentChamber(currentChamber int) {
+	r.currentChamber = currentChamber
+}
+
+func (r *Revolver) Chamber() []bool {
+	return r.chamber
+}
+
+func (r *Revolver) SetChamber(chamber []bool) {
+	r.chamber = chamber
 }
