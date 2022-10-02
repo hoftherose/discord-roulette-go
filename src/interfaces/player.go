@@ -4,4 +4,5 @@ package interfaces
 type Player interface {
 	GetID()
 	Mention()
+	Accepted()
 }
