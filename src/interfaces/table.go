@@ -1,6 +1,6 @@
 package interfaces
 
-//go:generate mockgen --destination=./mocks/table.go interfaces Table
+//go:generate mockgen --destination=./../../mocks/table.go github.com/holy-tech/discord-roulette/src/interfaces Table
 type Table interface {
 	InitTable(players ...User)
 	SpinTable()

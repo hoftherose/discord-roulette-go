@@ -1,6 +1,6 @@
 package interfaces
 
-//go:generate mockgen --destination=./mocks/gun.go interfaces Gun
+//go:generate mockgen --destination=./../../mocks/gun.go github.com/holy-tech/discord-roulette/src/interfaces Gun
 type Gun interface {
 	ReloadGun(sizeChamber, numBullets int)
 	SpinChamber()
