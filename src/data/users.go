@@ -6,6 +6,17 @@ import (
 
 type User struct {
 	discordgo.User
-	GamesWon    int
-	GamesPlayed int
+	accepted bool
+}
+
+func (u *User) GetID() string {
+	return u.ID
+}
+
+func (u *User) Accept() {
+	u.accepted = true
+}
+
+func (u *User) Accepted() bool {
+	return u.accepted
 }
