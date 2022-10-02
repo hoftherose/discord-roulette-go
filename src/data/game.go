@@ -51,7 +51,6 @@ func (s *GameStatus) Shoot(user *discordgo.User) (bool, error) {
 	s.Revolver.SetNextChamber()
 	s.TableState.SetNextPlayer()
 	if shot {
-		s.TableState.Losers = append(s.TableState.Losers, user.ID)
 		delete(s.Opponents, user.ID)
 		s.TableState.RemovePlayer(user.ID)
 	}
