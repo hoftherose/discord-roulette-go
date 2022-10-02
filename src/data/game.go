@@ -1,62 +1,78 @@
 package data
 
 import (
-	"errors"
-
 	"github.com/bwmarrin/discordgo"
+	i "github.com/holy-tech/discord-roulette/src/interfaces"
 )
 
 var (
-	DefaultOpponents             map[string]Player = map[string]Player{}
-	DefaultGameAccepted          bool              = false
-	DefaultSpinChamberRule       bool              = false
-	DefaultSpinChamberOnShotRule bool              = false
-	DefaultReplaceBulletRule     bool              = false
-	DefaultChannel               string            = ""
+	DefaultGameAccepted bool   = false
+	DefaultChannel      string = ""
 )
 
 type Player struct {
 	discordgo.User
-	Accepted string `json:"accepted"`
+	accepted bool `json:"accepted"`
 }
 
 type GameStatus struct {
-	Opponents             map[string]Player
-	TableState            TableState
-	Revolver              Revolver
-	GameAccepted          bool   `json:"game_accepted,omitempty"`
-	SpinChamberRule       bool   `json:"spin_chamber,omitempty"`
-	SpinChamberOnShotRule bool   `json:"spin_chamber_on_shot,omitempty"`
-	ReplaceBulletRule     bool   `json:"replace_bullet,omitempty"`
-	Channel               string `json:"channel,omitempty"`
+	Table        i.Table
+	Revolver     i.Gun
+	gameAccepted bool   `json:"game_accepted,omitempty"`
+	channel      string `json:"channel,omitempty"`
 }
 
 var DefaultGameStatus GameStatus = GameStatus{
-	DefaultOpponents,
 	DefaultTableState,
 	DefaultRevolver,
 	DefaultGameAccepted,
-	DefaultSpinChamberRule,
-	DefaultSpinChamberOnShotRule,
-	DefaultReplaceBulletRule,
 	DefaultChannel,
 }
 
-func (s *GameStatus) Shoot(user *discordgo.User) (bool, error) {
-	currPlayer := s.TableState.GetCurrentPlayer()
-	if user.ID != currPlayer {
-		return false, errors.New("it is not your turn")
+func (s *GameStatus) TakeTurn(user *discordgo.User) (bool, error) {
+	// currPlayer := s.TableState.GetCurrentPlayer()
+	// if user.ID != currPlayer {
+	// 	return false, errors.New("it is not your turn")
+	// }
+	// shot := s.Revolver.Chambers[s.Revolver.CurrentChamber]
+	// s.Revolver.SetNextChamber()
+	// s.TableState.SetNextPlayer()
+	// if shot {
+	// 	delete(s.Opponents, user.ID)
+	// 	s.TableState.RemovePlayer(user.ID)
+	// }
+	// s.Revolver.ClearChamber(shot)
+	// if s.Revolver.NumBulletsLeft <= 0 {
+	// 	s.Revolver.SpinChamber()
+	// }
+	return false, nil
+}
+
+func (s *GameStatus) Accepted() bool {
+	for _, player := range s.Table.Seating() {
+		if !player.Accepted() {
+			return false
+		}
 	}
-	shot := s.Revolver.Chambers[s.Revolver.CurrentChamber]
-	s.Revolver.SetNextChamber()
-	s.TableState.SetNextPlayer()
-	if shot {
-		delete(s.Opponents, user.ID)
-		s.TableState.RemovePlayer(user.ID)
-	}
-	s.Revolver.ClearChamber(shot)
-	if s.Revolver.NumBulletsLeft <= 0 {
-		s.Revolver.SpinChamber()
-	}
-	return shot, nil
+	return true
+}
+
+func (s *GameStatus) GameFinished() bool {
+	return s.Table.NumPlayers() < 2
+}
+
+func (s *GameStatus) Channel() string {
+	return s.channel
+}
+
+func (p *Player) GetID() string {
+	return p.ID
+}
+
+func (p *Player) Accept() {
+	p.accepted = true
+}
+
+func (p *Player) Accepted() bool {
+	return p.accepted
 }
