@@ -1,7 +1,6 @@
 package data
 
 import (
-	"github.com/bwmarrin/discordgo"
 	i "github.com/holy-tech/discord-roulette/src/interfaces"
 )
 
@@ -9,11 +8,6 @@ var (
 	DefaultGameAccepted bool   = false
 	DefaultChannel      string = ""
 )
-
-type Player struct {
-	discordgo.User
-	Accepted bool `json:"accepted"`
-}
 
 type GameStatus struct {
 	Table        i.Table
@@ -29,23 +23,12 @@ var DefaultGameStatus GameStatus = GameStatus{
 	DefaultChannel,
 }
 
-func (s *GameStatus) TakeTurn(user *discordgo.User) (bool, error) {
-	// currPlayer := s.TableState.GetCurrentPlayer()
-	// if user.ID != currPlayer {
-	// 	return false, errors.New("it is not your turn")
-	// }
-	// shot := s.Revolver.Chambers[s.Revolver.CurrentChamber]
-	// s.Revolver.SetNextChamber()
-	// s.TableState.SetNextPlayer()
-	// if shot {
-	// 	delete(s.Opponents, user.ID)
-	// 	s.TableState.RemovePlayer(user.ID)
-	// }
-	// s.Revolver.ClearChamber(shot)
-	// if s.Revolver.NumBulletsLeft <= 0 {
-	// 	s.Revolver.SpinChamber()
-	// }
-	return false, nil
+func (s *GameStatus) StartGame() {
+	//TODO implement
+}
+
+func (s *GameStatus) TakeTurn() {
+	//TODO implement
 }
 
 func (s *GameStatus) IsAccepted() bool {
@@ -63,16 +46,4 @@ func (s *GameStatus) GameFinished() bool {
 
 func (s *GameStatus) GetChannel() string {
 	return s.Channel
-}
-
-func (p *Player) GetID() string {
-	return p.ID
-}
-
-func (p *Player) Accept() {
-	p.Accepted = true
-}
-
-func (p *Player) HasAccepted() bool {
-	return p.Accepted
 }

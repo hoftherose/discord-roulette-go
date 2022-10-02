@@ -4,19 +4,19 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-type User struct {
+type Player struct {
 	discordgo.User
-	accepted bool
+	Accepted bool `json:"accepted"`
 }
 
-func (u *User) GetID() string {
-	return u.ID
+func (p *Player) GetID() string {
+	return p.ID
 }
 
-func (u *User) Accept() {
-	u.accepted = true
+func (p *Player) Accept() {
+	p.Accepted = true
 }
 
-func (u *User) Accepted() bool {
-	return u.accepted
+func (p *Player) HasAccepted() bool {
+	return p.Accepted
 }
