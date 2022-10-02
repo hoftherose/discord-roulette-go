@@ -2,11 +2,11 @@ package handlers
 
 import (
 	"github.com/bwmarrin/discordgo"
-	"github.com/holy-tech/discord-roulette/src/data"
+	i "github.com/holy-tech/discord-roulette/src/interfaces"
 	r "github.com/holy-tech/discord-roulette/src/roulette"
 )
 
-var AcceptHandle = data.Handler{
+var AcceptHandle = i.Handler{
 	CommandSpecs: &discordgo.ApplicationCommand{
 		Name:                     "roulette-accept",
 		Description:              "Accept roulette match",
@@ -24,7 +24,7 @@ var AcceptHandle = data.Handler{
 	},
 }
 
-var DenyHandle = data.Handler{
+var DenyHandle = i.Handler{
 	CommandSpecs: &discordgo.ApplicationCommand{
 		Name:                     "roulette-deny",
 		Description:              "Deny roulette match",

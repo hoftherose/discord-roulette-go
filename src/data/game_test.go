@@ -24,7 +24,7 @@ func TestShoot(t *testing.T) {
 	for _, tt := range tests {
 		testname := fmt.Sprintf("%d,%d", tt.currPlayer, tt.currChamber)
 		t.Run(testname, func(t *testing.T) {
-			gsetting := data.GameSettings{}
+			gsetting := data.GameStatus{}
 			shot, err := gsetting.Shoot(&discordgo.User{})
 			if shot != tt.expected {
 				t.Errorf("got %t, want %t", shot, tt.expected)

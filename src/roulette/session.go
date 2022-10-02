@@ -10,7 +10,7 @@ import (
 	db "github.com/holy-tech/discord-roulette/src/repo"
 )
 
-func getOpponentsFromSettings(s *d.GameSettings) []string {
+func getOpponentsFromSettings(s *d.GameStatus) []string {
 	opponents := make([]string, len(s.Opponents))
 	i := 0
 	for k := range s.Opponents {
@@ -20,11 +20,11 @@ func getOpponentsFromSettings(s *d.GameSettings) []string {
 	return opponents
 }
 
-func GameStart(s *d.GameSettings) string {
+func GameStart(s *d.GameStatus) string {
 	opponents := getOpponentsFromSettings(s)
 	resp := fmt.Sprintf(
 		`Preparing a %d-shooter with %d bullet(s). Prepare your self: %s`,
-		s.GunState.NumChamber, s.GunState.NumBullets, u.JoinStrings(", ", opponents...),
+		s.Revolver.NumChamber, s.Revolver.NumBullets, u.JoinStrings(", ", opponents...),
 	)
 	if err := db.CreateGameDocument(s.Channel, s); err != nil {
 		log.Printf("Error creating game document: %v", err)
