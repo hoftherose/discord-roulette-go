@@ -20,7 +20,7 @@ type Revolver struct {
 	seed           int64
 }
 
-var DefaultRevolver Revolver = Revolver{
+var DefaultRevolver *Revolver = &Revolver{
 	DefaultChamber,
 	DefaultNumBulletsLeft,
 	DefaultCurrentChamber,

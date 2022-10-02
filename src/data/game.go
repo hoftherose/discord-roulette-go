@@ -23,7 +23,7 @@ type GameStatus struct {
 }
 
 var DefaultGameStatus GameStatus = GameStatus{
-	DefaultTableState,
+	DefaultGameTable,
 	DefaultRevolver,
 	DefaultGameAccepted,
 	DefaultChannel,

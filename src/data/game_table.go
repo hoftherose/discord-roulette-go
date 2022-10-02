@@ -2,26 +2,28 @@ package data
 
 import (
 	"math/rand"
+
+	i "github.com/holy-tech/discord-roulette/src/interfaces"
 )
 
 var (
-	DefaultSeating     []Player = []Player{}
+	DefaultSeating     []i.User = []i.User{}
 	DefaultCurrentTurn int      = 0
 )
 
 type GameTable struct {
-	seating     []Player `json:"turns"`
+	seating     []i.User `json:"turns"`
 	currentTurn int      `json:"current_turn"`
 	seed        int64
 }
 
-var DefaultGameTable GameTable = GameTable{
+var DefaultGameTable *GameTable = &GameTable{
 	DefaultSeating,
 	DefaultCurrentTurn,
 	0,
 }
 
-func (t *GameTable) SetTable(players ...Player) {
+func (t *GameTable) SetTable(players ...i.User) {
 	t.SetSeating(players)
 	t.ShuffleTable()
 	t.SetCurrentTurn(0)
@@ -48,11 +50,11 @@ func (t *GameTable) NumPlayers() int {
 	return len(t.Seating())
 }
 
-func (t *GameTable) Seating() []Player {
+func (t *GameTable) Seating() []i.User {
 	return t.seating
 }
 
-func (t *GameTable) SetSeating(players []Player) {
+func (t *GameTable) SetSeating(players []i.User) {
 	t.seating = players
 }
 
