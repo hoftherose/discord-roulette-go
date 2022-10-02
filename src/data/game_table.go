@@ -39,7 +39,9 @@ func (t *GameTable) SpinTable() {
 }
 
 func (t *GameTable) ShuffleTable() {
-	rand.Shuffle(len(t.seating), func(i, j int) { t.seating[i], t.seating[j] = t.seating[j], t.seating[i] })
+	seating := t.Seating()
+	rand.Shuffle(len(seating), func(i, j int) { seating[i], seating[j] = seating[j], seating[i] })
+	t.SetSeating(seating)
 }
 
 func (t *GameTable) NumPlayers() int {
