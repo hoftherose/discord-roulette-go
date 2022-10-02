@@ -14,10 +14,10 @@ var (
 )
 
 type Revolver struct {
-	chamber        []bool `json:"chambers"`
-	numBulletsLeft int    `json:"num_bullets_left"`
-	currentChamber int    `json:"current_chamber"`
-	seed           int64
+	Chamber        []bool `json:"chambers"`
+	NumBulletsLeft int    `json:"num_bullets_left"`
+	CurrentChamber int    `json:"current_chamber"`
+	Seed           int64
 }
 
 var DefaultRevolver *Revolver = &Revolver{
@@ -32,13 +32,12 @@ func (r *Revolver) ReloadGun(sizeChamber, numBullets int) {
 	for i := range chamber {
 		chamber[i] = i < numBullets
 	}
-	r.SetSeed(time.Now().UnixNano())
 }
 
 func (r *Revolver) SpinChamber() {
-	rand.Seed(r.Seed())
-	newStart := rand.Int() % len(r.Chamber())
-	chamber := r.Chamber()
+	rand.Seed(r.GetSeed())
+	chamber := r.GetChamber()
+	newStart := rand.Int() % len(chamber)
 	r.SetChamber(
 		append(
 			chamber[newStart:],
@@ -48,26 +47,27 @@ func (r *Revolver) SpinChamber() {
 }
 
 func (r *Revolver) ShuffleChamber() {
-	chamber := r.Chamber()
+	rand.Seed(r.GetSeed())
+	chamber := r.GetChamber()
 	rand.Shuffle(len(chamber), func(i, j int) { chamber[i], chamber[j] = chamber[j], chamber[i] })
 	r.SetChamber(chamber)
 }
 
 func (r *Revolver) Shoot() bool {
-	currChamber := r.CurrentChamber()
-	chamber := r.Chamber()
+	currChamber := r.GetCurrentChamber()
+	chamber := r.GetChamber()
 	shot := chamber[currChamber]
 	if shot {
 		chamber[currChamber] = false
 	}
-	nextChamber := (r.CurrentChamber() + 1) % r.ChamberSize()
+	nextChamber := (r.GetCurrentChamber() + 1) % r.ChamberSize()
 	r.SetCurrentChamber(nextChamber)
 	return shot
 }
 
-func (r *Revolver) NumBulletsLeft() int {
+func (r *Revolver) GetNumBulletsLeft() int {
 	bulletCount := 0
-	for _, chamber := range r.Chamber() {
+	for _, chamber := range r.GetChamber() {
 		if chamber {
 			bulletCount += 1
 		}
@@ -76,29 +76,32 @@ func (r *Revolver) NumBulletsLeft() int {
 }
 
 func (r *Revolver) ChamberSize() int {
-	return len(r.Chamber())
+	return len(r.GetChamber())
 }
 
-func (r *Revolver) Seed() int64 {
-	return r.seed
+func (r *Revolver) GetSeed() int64 {
+	if r.Seed != 42 {
+		return time.Now().UnixNano()
+	}
+	return r.Seed
 }
 
 func (r *Revolver) SetSeed(seed int64) {
-	r.seed = seed
+	r.Seed = seed
 }
 
-func (r *Revolver) CurrentChamber() int {
-	return r.currentChamber
+func (r *Revolver) GetCurrentChamber() int {
+	return r.CurrentChamber
 }
 
 func (r *Revolver) SetCurrentChamber(currentChamber int) {
-	r.currentChamber = currentChamber
+	r.CurrentChamber = currentChamber
 }
 
-func (r *Revolver) Chamber() []bool {
-	return r.chamber
+func (r *Revolver) GetChamber() []bool {
+	return r.Chamber
 }
 
 func (r *Revolver) SetChamber(chamber []bool) {
-	r.chamber = chamber
+	r.Chamber = chamber
 }

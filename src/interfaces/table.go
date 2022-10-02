@@ -2,14 +2,14 @@ package interfaces
 
 //go:generate mockgen --destination=./mocks/table.go interfaces Table
 type Table interface {
-	SetTable(players ...User)
+	InitTable(players ...User)
 	SpinTable()
 	ShuffleTable()
 	NumPlayers() int
-	Seating() []User
+	GetSeating() []User
 	SetSeating([]User)
-	CurrentTurn() int
+	GetCurrentTurn() int
 	SetCurrentTurn(int)
-	Seed() int64
+	GetSeed() int64
 	SetSeed(int64)
 }

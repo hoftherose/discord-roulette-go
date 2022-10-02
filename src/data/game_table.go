@@ -12,9 +12,9 @@ var (
 )
 
 type GameTable struct {
-	seating     []i.User `json:"turns"`
-	currentTurn int      `json:"current_turn"`
-	seed        int64
+	Seating     []i.User `json:"turns"`
+	CurrentTurn int      `json:"current_turn"`
+	Seed        int64
 }
 
 var DefaultGameTable *GameTable = &GameTable{
@@ -23,7 +23,7 @@ var DefaultGameTable *GameTable = &GameTable{
 	0,
 }
 
-func (t *GameTable) SetTable(players ...i.User) {
+func (t *GameTable) InitTable(players ...i.User) {
 	t.SetSeating(players)
 	t.ShuffleTable()
 	t.SetCurrentTurn(0)
@@ -31,7 +31,7 @@ func (t *GameTable) SetTable(players ...i.User) {
 
 func (t *GameTable) SpinTable() {
 	newStart := rand.Int() % t.NumPlayers()
-	seating := t.Seating()
+	seating := t.GetSeating()
 	t.SetSeating(
 		append(
 			seating[newStart:],
@@ -41,35 +41,35 @@ func (t *GameTable) SpinTable() {
 }
 
 func (t *GameTable) ShuffleTable() {
-	seating := t.Seating()
+	seating := t.GetSeating()
 	rand.Shuffle(len(seating), func(i, j int) { seating[i], seating[j] = seating[j], seating[i] })
 	t.SetSeating(seating)
 }
 
 func (t *GameTable) NumPlayers() int {
-	return len(t.Seating())
+	return len(t.GetSeating())
 }
 
-func (t *GameTable) Seating() []i.User {
-	return t.seating
+func (t *GameTable) GetSeating() []i.User {
+	return t.Seating
 }
 
 func (t *GameTable) SetSeating(players []i.User) {
-	t.seating = players
+	t.Seating = players
 }
 
-func (t *GameTable) CurrentTurn() int {
-	return t.currentTurn
+func (t *GameTable) GetCurrentTurn() int {
+	return t.CurrentTurn
 }
 
 func (t *GameTable) SetCurrentTurn(currentTurn int) {
-	t.currentTurn = currentTurn
+	t.CurrentTurn = currentTurn
 }
 
-func (t *GameTable) Seed() int64 {
-	return t.seed
+func (t *GameTable) GetSeed() int64 {
+	return t.Seed
 }
 
 func (t *GameTable) SetSeed(seed int64) {
-	t.seed = seed
+	t.Seed = seed
 }

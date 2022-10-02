@@ -5,5 +5,5 @@ type User interface {
 	GetID() string
 	Mention() string
 	Accept()
-	Accepted() bool
+	HasAccepted() bool
 }

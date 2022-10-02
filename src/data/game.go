@@ -12,14 +12,14 @@ var (
 
 type Player struct {
 	discordgo.User
-	accepted bool `json:"accepted"`
+	Accepted bool `json:"accepted"`
 }
 
 type GameStatus struct {
 	Table        i.Table
 	Revolver     i.Gun
-	gameAccepted bool   `json:"game_accepted,omitempty"`
-	channel      string `json:"channel,omitempty"`
+	GameAccepted bool   `json:"game_accepted,omitempty"`
+	Channel      string `json:"channel,omitempty"`
 }
 
 var DefaultGameStatus GameStatus = GameStatus{
@@ -48,9 +48,9 @@ func (s *GameStatus) TakeTurn(user *discordgo.User) (bool, error) {
 	return false, nil
 }
 
-func (s *GameStatus) Accepted() bool {
-	for _, player := range s.Table.Seating() {
-		if !player.Accepted() {
+func (s *GameStatus) IsAccepted() bool {
+	for _, player := range s.Table.GetSeating() {
+		if !player.HasAccepted() {
 			return false
 		}
 	}
@@ -61,8 +61,8 @@ func (s *GameStatus) GameFinished() bool {
 	return s.Table.NumPlayers() < 2
 }
 
-func (s *GameStatus) Channel() string {
-	return s.channel
+func (s *GameStatus) GetChannel() string {
+	return s.Channel
 }
 
 func (p *Player) GetID() string {
@@ -70,9 +70,9 @@ func (p *Player) GetID() string {
 }
 
 func (p *Player) Accept() {
-	p.accepted = true
+	p.Accepted = true
 }
 
-func (p *Player) Accepted() bool {
-	return p.accepted
+func (p *Player) HasAccepted() bool {
+	return p.Accepted
 }

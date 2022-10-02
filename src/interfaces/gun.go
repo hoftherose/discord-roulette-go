@@ -6,12 +6,12 @@ type Gun interface {
 	SpinChamber()
 	ShuffleChamber()
 	Shoot() bool
-	NumBulletsLeft() int
+	GetNumBulletsLeft() int
 	ChamberSize() int
-	Seed() int64
+	GetSeed() int64
 	SetSeed(seed int64)
-	CurrentChamber() int
+	GetCurrentChamber() int
 	SetCurrentChamber(currChamber int)
-	Chamber() []bool
+	GetChamber() []bool
 	SetChamber(chamber []bool)
 }
