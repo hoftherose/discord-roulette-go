@@ -15,8 +15,8 @@ func getSettingsFromOptions(
 	opt []*discordgo.ApplicationCommandInteractionDataOption,
 	challenger *discordgo.User,
 	channel string,
-) d.GameSettings {
-	settings := d.GameSettings(d.DefaultGameSettings)
+) d.GameStatus {
+	settings := d.GameStatus(d.DefaultGameStatus)
 
 	optionMap := make(map[string]*discordgo.ApplicationCommandInteractionDataOption, len(opt))
 	for _, opt := range opt {

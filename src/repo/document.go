@@ -44,8 +44,8 @@ func DeleteGameDocument(channel string) error {
 	return err
 }
 
-func GetGameDocument(channel string) (d.GameSettings, error) {
-	var result d.GameSettings
+func GetGameDocument(channel string) (d.GameStatus, error) {
+	var result d.GameStatus
 	db := Client.Database("games")
 	gameCollection := db.Collection(fmt.Sprintf("%s_game", channel))
 	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)

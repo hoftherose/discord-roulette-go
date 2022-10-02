@@ -20,7 +20,7 @@ type Player struct {
 	Accepted string `json:"accepted"`
 }
 
-type GameSettings struct {
+type GameStatus struct {
 	Opponents             map[string]Player
 	TableState            TableState
 	Revolver              Revolver
@@ -31,7 +31,7 @@ type GameSettings struct {
 	Channel               string `json:"channel,omitempty"`
 }
 
-var DefaultGameSettings GameSettings = GameSettings{
+var DefaultGameStatus GameStatus = GameStatus{
 	DefaultOpponents,
 	DefaultTableState,
 	DefaultRevolver,
@@ -42,7 +42,7 @@ var DefaultGameSettings GameSettings = GameSettings{
 	DefaultChannel,
 }
 
-func (s *GameSettings) Shoot(user *discordgo.User) (bool, error) {
+func (s *GameStatus) Shoot(user *discordgo.User) (bool, error) {
 	currPlayer := s.TableState.GetCurrentPlayer()
 	if user.ID != currPlayer {
 		return false, errors.New("it is not your turn")
