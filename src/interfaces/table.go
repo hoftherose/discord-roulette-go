@@ -1,7 +1,7 @@
 package interfaces
 
-//go:generate mockgen --destination=./mocks/table_state.go interfaces TableState
-type TableState interface {
+//go:generate mockgen --destination=./mocks/table.go interfaces Table
+type Table interface {
 	SetTable(players ...Player)
 	SpinTable()
 	ShuffleTable()

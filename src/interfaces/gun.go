@@ -1,7 +1,7 @@
 package interfaces
 
-//go:generate mockgen --destination=./mocks/gun_state.go interfaces GunState
-type GunState interface {
+//go:generate mockgen --destination=./mocks/gun.go interfaces Gun
+type Gun interface {
 	ReloadGun(sizeChamber, numBullets int)
 	SpinChamber()
 	ShuffleChamber()
