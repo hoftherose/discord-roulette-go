@@ -48,23 +48,35 @@ func (r *Revolver) SpinChamber() {
 }
 
 func (r *Revolver) ShuffleChamber() {
-	//TODO write function
-	return
+	chamber := r.Chamber()
+	rand.Shuffle(len(chamber), func(i, j int) { chamber[i], chamber[j] = chamber[j], chamber[i] })
+	r.SetChamber(chamber)
 }
 
 func (r *Revolver) Shoot() bool {
-	//TODO write function
-	return true
+	currChamber := r.CurrentChamber()
+	chamber := r.Chamber()
+	shot := chamber[currChamber]
+	if shot {
+		chamber[currChamber] = false
+	}
+	nextChamber := (r.CurrentChamber() + 1) % r.ChamberSize()
+	r.SetCurrentChamber(nextChamber)
+	return shot
 }
 
 func (r *Revolver) NumBulletsLeft() int {
-	//TODO write function
-	return 0
+	bulletCount := 0
+	for _, chamber := range r.Chamber() {
+		if chamber {
+			bulletCount += 1
+		}
+	}
+	return bulletCount
 }
 
 func (r *Revolver) ChamberSize() int {
-	//TODO write function
-	return 0
+	return len(r.Chamber())
 }
 
 func (r *Revolver) Seed() int64 {
