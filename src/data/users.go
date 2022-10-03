@@ -1,16 +1,26 @@
 package data
 
-import (
-	"github.com/bwmarrin/discordgo"
-)
+//go:generate mockgen --destination=./../../mocks/mentioner.go github.com/holy-tech/discord-roulette/src/data Mentioner
+type Mentioner interface {
+	Mention() string
+}
+
+//go:generate mockgen --destination=./../../mocks/user.go github.com/holy-tech/discord-roulette/src/data User
+type User interface {
+	GetID() string
+	Mention() string
+	Accept()
+	HasAccepted() bool
+}
 
 type Player struct {
-	discordgo.User
-	Accepted bool `json:"accepted"`
+	Mentioner
+	Id       string `json:"id"`
+	Accepted bool   `json:"accepted"`
 }
 
 func (p *Player) GetID() string {
-	return p.ID
+	return p.Id
 }
 
 func (p *Player) Accept() {

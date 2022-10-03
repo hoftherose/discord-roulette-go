@@ -5,6 +5,22 @@ import (
 	"time"
 )
 
+//go:generate mockgen --destination=./../../mocks/gun.go github.com/holy-tech/discord-roulette/src/data Gun
+type Gun interface {
+	ReloadGun(sizeChamber, numBullets int)
+	SpinChamber()
+	ShuffleChamber()
+	Shoot() bool
+	GetNumBulletsLeft() int
+	ChamberSize() int
+	GetSeed() int64
+	SetSeed(seed int64)
+	GetCurrentChamber() int
+	SetCurrentChamber(currChamber int)
+	GetChamber() []bool
+	SetChamber(chamber []bool)
+}
+
 var (
 	DefaultChamber        []bool = []bool{}
 	DefaultNumChamber     int    = 6
@@ -32,6 +48,7 @@ func (r *Revolver) ReloadGun(sizeChamber, numBullets int) {
 	for i := range chamber {
 		chamber[i] = i < numBullets
 	}
+	r.SetChamber(chamber)
 }
 
 func (r *Revolver) SpinChamber() {
@@ -60,7 +77,7 @@ func (r *Revolver) Shoot() bool {
 	if shot {
 		chamber[currChamber] = false
 	}
-	nextChamber := (r.GetCurrentChamber() + 1) % r.ChamberSize()
+	nextChamber := (currChamber + 1) % r.ChamberSize()
 	r.SetCurrentChamber(nextChamber)
 	return shot
 }

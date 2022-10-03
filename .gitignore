@@ -16,4 +16,4 @@
 
 bin/*
 .env
-db/*
+mocks/*

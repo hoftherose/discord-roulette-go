@@ -1,8 +1,13 @@
 package data
 
-import (
-	i "github.com/holy-tech/discord-roulette/src/interfaces"
-)
+//go:generate mockgen --destination=./../../mocks/game.go github.com/holy-tech/discord-roulette/src/data Game
+type Game interface {
+	StartGame()
+	TakeTurn()
+	IsAccepted() bool
+	GameFinished() bool
+	GetChannel() string
+}
 
 var (
 	DefaultGameAccepted bool   = false
@@ -10,8 +15,8 @@ var (
 )
 
 type GameStatus struct {
-	Table        i.Table
-	Revolver     i.Gun
+	Table        Table
+	Revolver     Gun
 	GameAccepted bool   `json:"game_accepted,omitempty"`
 	Channel      string `json:"channel,omitempty"`
 }
