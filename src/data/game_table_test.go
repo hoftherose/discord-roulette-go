@@ -22,12 +22,11 @@ func PopulatePlayersID(ctrl *gomock.Controller, names []string) []data.User {
 func TestInitTable(t *testing.T) {
 	var tests = []struct {
 		playerNames []string
-		seed        int64
 		expected    []string
 	}{
-		{[]string{"hello", "world"}, 42, []string{"hello", "world"}},
-		{[]string{"1", "2", "3"}, 42, []string{"1", "2", "3"}},
-		{[]string{"1", "2", "3", "4", "5"}, 42, []string{"4", "1", "5", "2", "3"}},
+		{[]string{"hello", "world"}, []string{"world", "hello"}},
+		{[]string{"1", "2", "3"}, []string{"3", "1", "2"}},
+		{[]string{"1", "2", "3", "4", "5"}, []string{"3", "4", "5", "1", "2"}},
 	}
 
 	for i, tt := range tests {
@@ -36,11 +35,91 @@ func TestInitTable(t *testing.T) {
 			mockCtrl := gomock.NewController(t)
 			table := data.GameTable{}
 			players := PopulatePlayersID(mockCtrl, tt.playerNames)
+			table.SetSeed(42)
 			table.InitTable(players...)
 			for i, name := range table.GetSeating() {
 				if name.GetID() != tt.expected[i] {
 					t.Errorf("got %s, want %s", name.GetID(), tt.expected[i])
 				}
+			}
+		})
+	}
+}
+
+func TestSpinTable(t *testing.T) {
+	var tests = []struct {
+		playerNames []string
+		expected    []string
+	}{
+		{[]string{"hello", "world"}, []string{"world", "hello"}},
+		{[]string{"1", "2", "3"}, []string{"2", "3", "1"}},
+		{[]string{"1", "2", "3", "4", "5"}, []string{"1", "2", "3", "4", "5"}},
+	}
+
+	for i, tt := range tests {
+		testname := fmt.Sprintf("%d", i)
+		t.Run(testname, func(t *testing.T) {
+			mockCtrl := gomock.NewController(t)
+			table := data.GameTable{}
+			players := PopulatePlayersID(mockCtrl, tt.playerNames)
+			table.SetSeed(42)
+			table.SetSeating(players)
+			table.SpinTable()
+			for i, name := range table.GetSeating() {
+				if name.GetID() != tt.expected[i] {
+					t.Errorf("got %s, want %s", name.GetID(), tt.expected[i])
+				}
+			}
+		})
+	}
+}
+
+func TestShuffleTable(t *testing.T) {
+	var tests = []struct {
+		playerNames []string
+		expected    []string
+	}{
+		{[]string{"hello", "world"}, []string{"world", "hello"}},
+		{[]string{"1", "2", "3"}, []string{"3", "1", "2"}},
+		{[]string{"1", "2", "3", "4", "5"}, []string{"3", "4", "5", "1", "2"}},
+	}
+
+	for i, tt := range tests {
+		testname := fmt.Sprintf("%d", i)
+		t.Run(testname, func(t *testing.T) {
+			mockCtrl := gomock.NewController(t)
+			table := data.GameTable{}
+			players := PopulatePlayersID(mockCtrl, tt.playerNames)
+			table.SetSeed(42)
+			table.SetSeating(players)
+			table.ShuffleTable()
+			for i, name := range table.GetSeating() {
+				if name.GetID() != tt.expected[i] {
+					t.Errorf("got %s, want %s", name.GetID(), tt.expected[i])
+				}
+			}
+		})
+	}
+}
+
+func TestNumPlayers(t *testing.T) {
+	var tests = []struct {
+		playerNames []string
+	}{
+		{[]string{"hello", "world"}},
+		{[]string{"1", "2", "3"}},
+		{[]string{"1", "2", "3", "4", "5"}},
+	}
+
+	for i, tt := range tests {
+		testname := fmt.Sprintf("%d", i)
+		t.Run(testname, func(t *testing.T) {
+			mockCtrl := gomock.NewController(t)
+			table := data.GameTable{}
+			players := PopulatePlayersID(mockCtrl, tt.playerNames)
+			table.SetSeating(players)
+			if table.NumPlayers() != len(tt.playerNames) {
+				t.Errorf("got %d, want %d", table.NumPlayers(), len(tt.playerNames))
 			}
 		})
 	}

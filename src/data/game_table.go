@@ -2,6 +2,7 @@ package data
 
 import (
 	"math/rand"
+	"time"
 )
 
 //go:generate mockgen --destination=./../../mocks/table.go github.com/holy-tech/discord-roulette/src/data Table
@@ -42,6 +43,7 @@ func (t *GameTable) InitTable(players ...User) {
 }
 
 func (t *GameTable) SpinTable() {
+	rand.Seed(t.GetSeed())
 	newStart := rand.Int() % t.NumPlayers()
 	seating := t.GetSeating()
 	t.SetSeating(
@@ -53,6 +55,7 @@ func (t *GameTable) SpinTable() {
 }
 
 func (t *GameTable) ShuffleTable() {
+	rand.Seed(t.GetSeed())
 	seating := t.GetSeating()
 	rand.Shuffle(len(seating), func(i, j int) { seating[i], seating[j] = seating[j], seating[i] })
 	t.SetSeating(seating)
@@ -79,6 +82,9 @@ func (t *GameTable) SetCurrentTurn(currentTurn int) {
 }
 
 func (t *GameTable) GetSeed() int64 {
+	if t.Seed != 42 {
+		return time.Now().UnixNano()
+	}
 	return t.Seed
 }
 
