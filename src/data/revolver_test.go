@@ -51,7 +51,7 @@ func TestSpinChamber(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		testname := fmt.Sprintf("reload_%d_%d", tt.sizeChamber, tt.numBullets)
+		testname := fmt.Sprintf("spin_%d_%d", tt.sizeChamber, tt.numBullets)
 		t.Run(testname, func(t *testing.T) {
 			r := data.DefaultRevolver
 			r.SetSeed(tt.seed)
@@ -84,7 +84,7 @@ func TestShuffleChamber(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		testname := fmt.Sprintf("reload_%d_%d", tt.sizeChamber, tt.numBullets)
+		testname := fmt.Sprintf("shuffle_%d_%d", tt.sizeChamber, tt.numBullets)
 		t.Run(testname, func(t *testing.T) {
 			r := data.DefaultRevolver
 			r.SetSeed(tt.seed)
@@ -120,7 +120,7 @@ func TestShoot(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		testname := fmt.Sprintf("reload_%d_%d_%d", tt.sizeChamber, tt.numBullets, tt.currChamber)
+		testname := fmt.Sprintf("shoot_%d_%d_%d", tt.sizeChamber, tt.numBullets, tt.currChamber)
 		t.Run(testname, func(t *testing.T) {
 			r := data.DefaultRevolver
 			r.ReloadGun(tt.sizeChamber, tt.numBullets)
@@ -135,6 +135,32 @@ func TestShoot(t *testing.T) {
 			}
 			if r.GetNumBulletsLeft() != tt.expectedNumBullets {
 				t.Errorf("got %d, wanted %d", r.GetCurrentChamber(), tt.expectedChamber)
+			}
+		})
+	}
+}
+
+func TestGetNumBulletsLeft(t *testing.T) {
+	var tests = []struct {
+		chambers []bool
+		expected int
+	}{
+		{[]bool{false, true, false, false, false, false}, 1},
+		{[]bool{true, true, false}, 2},
+		{[]bool{false, false, false}, 0},
+		{[]bool{}, 0},
+		{[]bool{true, true, false, true}, 3},
+		{[]bool{true, true, true, true, true, true}, 6},
+	}
+
+	for i, tt := range tests {
+		testname := fmt.Sprintf("bullets_left_%d", i)
+		t.Run(testname, func(t *testing.T) {
+			r := data.DefaultRevolver
+			r.SetChamber(tt.chambers)
+
+			if r.GetNumBulletsLeft() != tt.expected {
+				t.Errorf("got %d, wanted %d", r.GetCurrentChamber(), tt.expected)
 			}
 		})
 	}
