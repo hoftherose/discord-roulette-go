@@ -61,7 +61,7 @@ func (r *Revolver) Shoot() bool {
 	if shot {
 		chamber[currChamber] = false
 	}
-	nextChamber := (r.GetCurrentChamber() + 1) % r.ChamberSize()
+	nextChamber := (currChamber + 1) % r.ChamberSize()
 	r.SetCurrentChamber(nextChamber)
 	return shot
 }
