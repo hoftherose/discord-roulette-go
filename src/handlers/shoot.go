@@ -2,11 +2,10 @@ package handlers
 
 import (
 	"github.com/bwmarrin/discordgo"
-	i "github.com/holy-tech/discord-roulette/src/interfaces"
 	r "github.com/holy-tech/discord-roulette/src/roulette"
 )
 
-var ShootHandle = i.Handler{
+var ShootHandle = Handler{
 	CommandSpecs: &discordgo.ApplicationCommand{
 		Name:                     "roulette-shoot",
 		Description:              "Pull the trigger",

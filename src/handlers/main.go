@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/bwmarrin/discordgo"
-	i "github.com/holy-tech/discord-roulette/src/interfaces"
 )
 
 var (
@@ -18,7 +17,7 @@ func Ready(session *discordgo.Session, event *discordgo.Ready) {
 	session.UpdateGameStatus(0, readyStatus)
 }
 
-func AppendHandler(s *discordgo.Session, h *i.Handler) {
+func AppendHandler(s *discordgo.Session, h *Handler) {
 	s.AddHandler(func(s *discordgo.Session, ic *discordgo.InteractionCreate) {
 		if h.CommandSpecs.Name == ic.ApplicationCommandData().Name {
 			h.CommandHandler(s, ic)
