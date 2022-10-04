@@ -12,12 +12,12 @@ var AcceptHandle = Handler{
 		DefaultMemberPermissions: &defaultAdmin,
 	},
 	CommandHandler: func(s *discordgo.Session, i *discordgo.InteractionCreate) {
-		challenger := i.Member.User
+		user := i.Member.User
 		channel := i.ChannelID
 		s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
-				Content: r.ChallengeAccept(channel, challenger),
+				Content: r.ChallengeAccept(channel, user),
 			},
 		})
 	},
