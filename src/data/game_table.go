@@ -7,9 +7,10 @@ import (
 
 //go:generate mockgen --destination=./../../mocks/table.go github.com/holy-tech/discord-roulette/src/data Table
 type Table interface {
-	InitTable(players ...User)
+	InitTable(...User)
 	SpinTable()
 	ShuffleTable()
+	AcceptPlayer(string)
 	NumPlayers() int
 	GetSeating() []User
 	SetSeating([]User)
@@ -59,6 +60,15 @@ func (t *GameTable) ShuffleTable() {
 	seating := t.GetSeating()
 	rand.Shuffle(len(seating), func(i, j int) { seating[i], seating[j] = seating[j], seating[i] })
 	t.SetSeating(seating)
+}
+
+func (t *GameTable) AcceptPlayer(id string) {
+	seating := t.GetSeating()
+	for _, user := range seating {
+		if user.GetID() == id {
+			user.Accept()
+		}
+	}
 }
 
 func (t *GameTable) NumPlayers() int {
