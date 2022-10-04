@@ -12,6 +12,7 @@ type Table interface {
 	ShuffleTable()
 	AcceptPlayer(string)
 	NumPlayers() int
+	GetCurrentPlayer() User
 	GetSeating() []User
 	SetSeating([]User)
 	GetCurrentTurn() int
@@ -73,6 +74,10 @@ func (t *GameTable) AcceptPlayer(id string) {
 
 func (t *GameTable) NumPlayers() int {
 	return len(t.GetSeating())
+}
+
+func (t *GameTable) GetCurrentPlayer() User {
+	return t.Seating[t.GetCurrentTurn()]
 }
 
 func (t *GameTable) GetSeating() []User {
