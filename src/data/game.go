@@ -28,12 +28,14 @@ var DefaultGameStatus GameStatus = GameStatus{
 	DefaultChannel,
 }
 
-func (s *GameStatus) StartGame() {
+func (s *GameStatus) StartGame() error {
 	//TODO implement
+	return nil
 }
 
-func (s *GameStatus) TakeTurn() {
+func (s *GameStatus) TakeTurn() (bool, error) {
 	//TODO implement
+	return false, nil
 }
 
 func (s *GameStatus) IsAccepted() bool {

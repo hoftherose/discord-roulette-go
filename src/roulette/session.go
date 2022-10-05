@@ -29,9 +29,9 @@ func GameStart(s *data.GameStatus) string {
 func ChallengeAccept(channel string, user *discordgo.User) string {
 	var message string
 	player := data.Player{
-		user,
-		user.ID,
-		data.DefaultGameAccepted,
+		Mentioner: user,
+		Id:        user.ID,
+		Accepted:  data.DefaultGameAccepted,
 	}
 	game, err := db.GetGameDocument(channel)
 	if err != nil {

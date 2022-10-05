@@ -10,7 +10,7 @@ import (
 
 var defaultAdmin int64 = discordgo.PermissionAdministrator
 
-func getSettingsFromOptions(
+func getGameFromOptions(
 	s *discordgo.Session,
 	opt []*discordgo.ApplicationCommandInteractionDataOption,
 	challenger *discordgo.User,
@@ -78,12 +78,12 @@ var RouletteHandle = Handler{
 	CommandHandler: func(s *discordgo.Session, ic *discordgo.InteractionCreate) {
 		options := ic.ApplicationCommandData().Options
 		challenger := ic.Member.User
-		settings := getSettingsFromOptions(s, options, challenger, ic.ChannelID)
+		game := getGameFromOptions(s, options, challenger, ic.ChannelID)
 
 		s.InteractionRespond(ic.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
-				Content: r.GameStart(&settings),
+				Content: r.GameStart(&game),
 			},
 		})
 	},
