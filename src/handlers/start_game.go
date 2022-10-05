@@ -30,10 +30,10 @@ func getGameFromOptions(
 		players = append(players, &data.Player{Mentioner: opponent, Id: opponent.ID, Accepted: true})
 	}
 	players = append(players, &data.Player{Mentioner: challenger, Id: challenger.ID, Accepted: true})
-	if numChamberValue, ok := optionMap["num_chambers"]; !ok {
+	if numChamberValue, ok := optionMap["num_chambers"]; ok {
 		numChamber = int(numChamberValue.IntValue())
 	}
-	if numBulletValue, ok := optionMap["num_bullets"]; !ok {
+	if numBulletValue, ok := optionMap["num_bullets"]; ok {
 		numBullets = int(numBulletValue.IntValue())
 	}
 	table := data.GameTable{}
