@@ -11,28 +11,25 @@ func GetGameInfo(channel string) string {
 }
 
 func ShootTurn(channel string, user *discordgo.User) string {
-	accepted, err := db.GameIsAccepted(channel)
-	if err != nil {
-		return "No shots fired: " + err.Error()
-	}
+	var message string
 	game, _ := db.GetGameDocument(channel)
+	accepted := game.IsAccepted()
 	if !accepted {
 		return "Game still is not accepted"
 	}
 
-	var message string
-	shot, err := game.Shoot(user)
+	shot, err := game.TakeTurn()
 	db.UpdateGameDocument(channel, game)
 	if err != nil {
 		message = "Error: " + err.Error()
 	} else if shot {
-		message = "You died <@" + user.ID + ">"
+		message = "You died " + user.Mention()
 	} else {
-		message = "You live <@" + user.ID + ">"
+		message = "You live " + user.Mention()
 	}
-	if game.TableState.Ongoing() {
-		return message + "\nIt is <@" + game.TableState.GetCurrentPlayer() + "> turn."
+	if !game.GameFinished() {
+		return message + "\nIt is " + game.Table.GetCurrentPlayer().Mention() + " turn."
 	}
 	db.DeleteGameDocument(channel)
-	return message + "\nThe winner is: <@" + game.TableState.Turns[0] + ">"
+	return message + "\nThe winner is: " + game.Table.GetCurrentPlayer().Mention()
 }
