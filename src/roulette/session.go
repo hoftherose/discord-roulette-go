@@ -33,7 +33,7 @@ func ChallengeAccept(channel string, user *discordgo.User) string {
 		Id:        user.ID,
 		Accepted:  data.DefaultGameAccepted,
 	}
-	game, err := db.GetGameDocument(channel)
+	game, err := GetGame(channel)
 	if err != nil {
 		return player.Mention() + " Could not accept: " + err.Error()
 	}

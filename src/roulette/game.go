@@ -2,17 +2,25 @@ package roulette
 
 import (
 	"github.com/bwmarrin/discordgo"
+	"github.com/holy-tech/discord-roulette/src/data"
 	db "github.com/holy-tech/discord-roulette/src/repo"
 )
 
+func GetGame(channel string) (data.GameStatus, error) {
+	var result data.GameStatus
+	encResult := db.GetGameDocument(channel)
+	encResult.Decode(&result)
+	return result, encResult.Err()
+}
+
 func GetGameInfo(channel string) string {
-	result, _ := db.GetGameDocument(channel)
+	result, _ := GetGame(channel)
 	return "Info" + result.Channel
 }
 
 func ShootTurn(channel string, user *discordgo.User) string {
 	var message string
-	game, _ := db.GetGameDocument(channel)
+	game, _ := GetGame(channel)
 	accepted := game.IsAccepted()
 	if !accepted {
 		return "Game still is not accepted"
