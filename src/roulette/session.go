@@ -33,11 +33,14 @@ func ChallengeAccept(channel string, user *discordgo.User) string {
 		Id:        user.ID,
 		Accepted:  data.DefaultGameAccepted,
 	}
+	// GETGAME DOES NOT DEFINE TABLE OR REVOLVER
 	game, err := GetGame(channel)
 	if err != nil {
-		return player.Mention() + " Could not accept: " + err.Error()
+		mention := user.Mention()
+		errVar := err.Error()
+		return mention + " Could not accept: " + errVar
 	}
-	game.Table.AcceptPlayer(player.GetID())
+	game.Table.AcceptPlayer(user.ID)
 	if game.IsAccepted() {
 		message += "\nIt is " + game.Table.GetCurrentPlayer().Mention() + " turn."
 	}
