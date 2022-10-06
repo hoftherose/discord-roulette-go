@@ -8,8 +8,8 @@ import (
 
 	"log"
 
-	d "github.com/holy-tech/discord-roulette/src/data"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func CreateGameDocument(channel string, settings interface{}) error {
@@ -44,16 +44,14 @@ func DeleteGameDocument(channel string) error {
 	return err
 }
 
-func GetGameDocument(channel string) (d.GameStatus, error) {
-	var result d.GameStatus
+func GetGameDocument(channel string) *mongo.SingleResult {
 	db := Client.Database("games")
 	gameCollection := db.Collection(fmt.Sprintf("%s_game", channel))
 	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelCtx()
 
 	encResult := gameCollection.FindOne(ctx, bson.M{"channel": channel})
-	encResult.Decode(&result)
-	return result, encResult.Err()
+	return encResult
 }
 
 func UpdateGameDocument(channel string, new interface{}) error {

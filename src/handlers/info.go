@@ -3,11 +3,10 @@ package handlers
 import (
 	"github.com/bwmarrin/discordgo"
 	embed "github.com/holy-tech/discord-roulette/src/embed"
-	i "github.com/holy-tech/discord-roulette/src/interfaces"
 	r "github.com/holy-tech/discord-roulette/src/roulette"
 )
 
-var GetGameHandle = i.Handler{
+var GetGameHandle = Handler{
 	CommandSpecs: &discordgo.ApplicationCommand{
 		Name:                     "roulette-info",
 		Description:              "Get roulette info",

@@ -6,25 +6,18 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	u "github.com/holy-tech/discord-roulette/src"
-	d "github.com/holy-tech/discord-roulette/src/data"
+	"github.com/holy-tech/discord-roulette/src/data"
 	db "github.com/holy-tech/discord-roulette/src/repo"
 )
 
-func getOpponentsFromSettings(s *d.GameStatus) []string {
-	opponents := make([]string, len(s.Opponents))
-	i := 0
-	for k := range s.Opponents {
-		opponents[i] = "<@" + k + ">"
-		i++
+func GameStart(s *data.GameStatus) string {
+	seatingName := []string{}
+	for _, user := range s.Table.GetSeating() {
+		seatingName = append(seatingName, user.Mention())
 	}
-	return opponents
-}
-
-func GameStart(s *d.GameStatus) string {
-	opponents := getOpponentsFromSettings(s)
 	resp := fmt.Sprintf(
 		`Preparing a %d-shooter with %d bullet(s). Prepare your self: %s`,
-		s.Revolver.NumChamber, s.Revolver.NumBullets, u.JoinStrings(", ", opponents...),
+		s.Revolver.ChamberSize(), s.Revolver.GetNumBulletsLeft(), u.JoinStrings(", ", seatingName...),
 	)
 	if err := db.CreateGameDocument(s.Channel, s); err != nil {
 		log.Printf("Error creating game document: %v", err)
@@ -34,16 +27,17 @@ func GameStart(s *d.GameStatus) string {
 }
 
 func ChallengeAccept(channel string, user *discordgo.User) string {
-	err := db.AcceptPlayer(channel, user)
+	var message string
+	game, err := GetGame(channel)
 	if err != nil {
-		return "<@" + user.ID + "> Could not accept: " + err.Error()
+		return user.Mention() + " Could not accept: " + err.Error()
 	}
-	message, ready := db.AwaitingPlayer(channel)
-	if ready {
-		SetTable(channel)
-		message += "\nIt is <@" + db.GetCurrentPlayer(channel) + "> turn."
+	game.Table.AcceptPlayer(user.ID)
+	db.UpdateGameDocument(channel, game)
+	if game.IsAccepted() {
+		message += "\nIt is " + game.Table.GetCurrentPlayer().Mention() + " turn."
 	}
-	return "<@" + user.ID + "> has accepted!!\n" + message
+	return user.Mention() + " has accepted!!\n" + message
 }
 
 func ChallengeDeny(channel string, user *discordgo.User) string {
@@ -52,5 +46,5 @@ func ChallengeDeny(channel string, user *discordgo.User) string {
 		log.Printf("Error removing game: %v", err)
 		resp = fmt.Sprintf("Error: %v", err)
 	}
-	return "<@" + user.ID + "> has denied!!\n" + resp
+	return user.Mention() + " has denied!!\n" + resp
 }
