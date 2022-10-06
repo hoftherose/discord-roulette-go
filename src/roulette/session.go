@@ -33,7 +33,6 @@ func ChallengeAccept(channel string, user *discordgo.User) string {
 		Id:        user.ID,
 		Accepted:  data.DefaultGameAccepted,
 	}
-	// GETGAME DOES NOT DEFINE TABLE OR REVOLVER
 	game, err := GetGame(channel)
 	if err != nil {
 		mention := user.Mention()

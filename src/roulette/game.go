@@ -4,13 +4,68 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/holy-tech/discord-roulette/src/data"
 	db "github.com/holy-tech/discord-roulette/src/repo"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+func GetGun(revolver primitive.M) data.Gun {
+	chamber := []bool{}
+	for _, bullet := range revolver["chamber"].(primitive.A) {
+		chamber = append(chamber, bullet.(bool))
+	}
+	numBulletsLeft := int(revolver["numbulletsleft"].(int32))
+	currentChamber := int(revolver["currentchamber"].(int32))
+	seed := revolver["seed"].(int64)
+	gun := &data.Revolver{
+		Chamber:        chamber,
+		NumBulletsLeft: numBulletsLeft,
+		CurrentChamber: currentChamber,
+		Seed:           seed,
+	}
+	return gun
+}
+
+func GetTable(table primitive.M) data.Table {
+	seating := []data.User{}
+	for _, player := range table["seating"].(primitive.A) {
+		user := GetUser(player.(primitive.M))
+		seating = append(seating, user)
+	}
+	currentTurn := int(table["currentturn"].(int32))
+	seed := table["seed"].(int64)
+	gameTable := &data.GameTable{
+		Seating:     seating,
+		CurrentTurn: currentTurn,
+		Seed:        seed,
+	}
+	return gameTable
+}
+
+func GetUser(user primitive.M) data.User {
+	id := user["id"].(string)
+	accepted := user["accepted"].(bool)
+	player := &data.Player{
+		Id:       id,
+		Accepted: accepted,
+	}
+	return player
+}
+
 func GetGame(channel string) (data.GameStatus, error) {
-	var result data.GameStatus
+	var result bson.M
 	encResult := db.GetGameDocument(channel)
+
 	encResult.Decode(&result)
-	return result, encResult.Err()
+	gun := GetGun(result["revolver"].(bson.M))
+	table := GetTable(result["table"].(bson.M))
+	game := data.GameStatus{
+		Table:        table,
+		Revolver:     gun,
+		GameAccepted: result["gameaccepted"].(bool),
+		Channel:      result["channel"].(string),
+	}
+	return game, encResult.Err()
+	// return result, encResult.Err()
 }
 
 func GetGameInfo(channel string) string {
