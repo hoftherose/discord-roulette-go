@@ -39,11 +39,15 @@ func (s *GameStatus) TakeTurn() (bool, error) {
 }
 
 func (s *GameStatus) IsAccepted() bool {
+	if s.GameAccepted {
+		return true
+	}
 	for _, player := range s.Table.GetSeating() {
 		if !player.HasAccepted() {
 			return false
 		}
 	}
+	s.GameAccepted = true
 	return true
 }
 

@@ -75,7 +75,10 @@ func GetGameInfo(channel string) string {
 
 func ShootTurn(channel string, user *discordgo.User) string {
 	var message string
-	game, _ := GetGame(channel)
+	game, err := GetGame(channel)
+	if err != nil {
+		return "No game found"
+	}
 	accepted := game.IsAccepted()
 	if !accepted {
 		return "Game still is not accepted"
