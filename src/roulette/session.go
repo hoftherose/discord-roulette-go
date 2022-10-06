@@ -28,22 +28,16 @@ func GameStart(s *data.GameStatus) string {
 
 func ChallengeAccept(channel string, user *discordgo.User) string {
 	var message string
-	player := data.Player{
-		Mentioner: user,
-		Id:        user.ID,
-		Accepted:  data.DefaultGameAccepted,
-	}
 	game, err := GetGame(channel)
 	if err != nil {
-		mention := user.Mention()
-		errVar := err.Error()
-		return mention + " Could not accept: " + errVar
+		return user.Mention() + " Could not accept: " + err.Error()
 	}
 	game.Table.AcceptPlayer(user.ID)
+	db.UpdateGameDocument(channel, game)
 	if game.IsAccepted() {
 		message += "\nIt is " + game.Table.GetCurrentPlayer().Mention() + " turn."
 	}
-	return player.Mention() + " has accepted!!\n" + message
+	return user.Mention() + " has accepted!!\n" + message
 }
 
 func ChallengeDeny(channel string, user *discordgo.User) string {

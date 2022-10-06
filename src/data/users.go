@@ -14,9 +14,12 @@ type User interface {
 }
 
 type Player struct {
-	Mentioner
 	Id       string `json:"id"`
 	Accepted bool   `json:"accepted"`
+}
+
+func (p *Player) Mention() string {
+	return "<@" + p.Id + ">"
 }
 
 func (p *Player) GetID() string {
