@@ -1,66 +1,58 @@
-apiVersion: tekton.dev/v1beta1
-kind: Task
+apiVersion: v1
+kind: Namespace
 metadata:
-  name: hello
-spec:
-  steps:
-    - name: hello
-      image: alpine
-      script: |
-        #!/bin/sh
-        echo "Hello World"
----
-apiVersion: tekton.dev/v1beta1
-kind: Task
-metadata:
-  name: goodbye
-spec:
-  steps:
-    - name: goodbye
-      image: alpine
-      script: |
-        #!/bin/sh
-        echo "Goodbye World!"
+  name: repo-pipeline
+  labels:
+    env: test
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: yaml-updater
+  namespace: repo-pipeline
 spec:
+  params:
+  - name: sha
+    type: string
+  - name: repoURL
+    type: string
   steps:
     - name: yaml-updater
       image: bitnami/kubectl
       script: |
         #!/bin/sh
-        kubectl get nodes
+        git diff --no-commit-id --name-only -r $(params.sha)
+        echo $(params.sha)
+        echo $(params.repoURL)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: get-nodes
+  namespace: repo-pipeline
 spec:
+  params:
+  - name: sha
+    type: string
+    description: "the SHA of the recently detected change"
+  - name: repoURL
+    type: string
+    description: "the cloneURL that the change was detected in"
   tasks:
   - name: yaml-updater
+    params:
+    - name: sha
+      value: $(params.sha)
+    - name: repoURL
+      value: $(params.repoURL)
     taskRef:
       name: yaml-updater
----
-apiVersion: tekton.dev/v1beta1
-kind: Pipeline
-metadata:
-  name: full-meeting
-spec:
-  tasks:
-  - name: say-hello
-    taskRef:
-      name: hello
-  - name: say-goodbye
-    taskRef:
-      name: goodbye
 ---
 apiVersion: polling.tekton.dev/v1alpha1
 kind: Repository
 metadata:
   name: github-listener
+  namespace: repo-pipeline
   labels:
     name: test
 spec:
@@ -70,10 +62,8 @@ spec:
   type: github
   pipelineRef:
     name: get-nodes
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: repo-pipeline
-  labels:
-    env: test
+    params:
+    - name: sha
+      expression: commit.sha
+    - name: repo
+      expression: repoURL
