@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Github issue templates.
 - Testing for the packages: data
 - Interfaces for objects
+- Tekton CICD pipeline folder
 
 ## [0.1.0] - 2022-09-26
 ### Added
