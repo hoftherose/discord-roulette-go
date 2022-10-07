@@ -8,22 +8,53 @@ metadata:
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
+  name: check-for-changes
+  namespace: repo-pipeline
+spec:
+  params:
+    - name: sha
+      type: string
+    - name: repoURL
+      type: string
+  results:
+    - name: changed
+      description: Returns value only if changes were found
+  steps:
+    - name: check-for-changes
+      image: bitnami/kubectl
+      script: |
+        #!/bin/sh
+        cd usr
+        git clone $(params.repoURL) repo
+        cd repo
+        git diff --no-commit-id --name-only -r $(params.sha) >> changes.txt
+        egrep '^\.cicd' changes.txt
+        if egrep -q '^\.cicd' changes.txt
+        then
+          echo -n "Changes found" >> $(results.changed.path)
+        fi
+        echo $(results.changed.path)
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
   name: yaml-updater
   namespace: repo-pipeline
 spec:
   params:
-  - name: sha
-    type: string
-  - name: repoURL
-    type: string
+    - name: sha
+      type: string
+    - name: repoURL
+      type: string
   steps:
     - name: yaml-updater
       image: bitnami/kubectl
       script: |
         #!/bin/sh
-        git diff --no-commit-id --name-only -r $(params.sha)
-        echo $(params.sha)
-        echo $(params.repoURL)
+        cd usr
+        git clone $(params.repoURL) repo
+        cd repo
+        kubectl apply -f .cicd
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
