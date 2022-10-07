@@ -49,6 +49,7 @@ func (r *Revolver) ReloadGun(sizeChamber, numBullets int) {
 		chamber[i] = i < numBullets
 	}
 	r.SetChamber(chamber)
+	r.ShuffleChamber()
 }
 
 func (r *Revolver) SpinChamber() {
