@@ -2,7 +2,6 @@ package data
 
 //go:generate mockgen --destination=./../../mocks/game.go github.com/holy-tech/discord-roulette/src/data Game
 type Game interface {
-	StartGame()
 	TakeTurn() bool
 	IsAccepted() bool
 	GameFinished() bool
@@ -26,11 +25,6 @@ var DefaultGameStatus GameStatus = GameStatus{
 	DefaultRevolver,
 	DefaultGameAccepted,
 	DefaultChannel,
-}
-
-func (s *GameStatus) StartGame() error {
-	//TODO implement
-	return nil
 }
 
 func (s *GameStatus) TakeTurn() bool {
