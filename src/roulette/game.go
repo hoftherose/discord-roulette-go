@@ -83,8 +83,11 @@ func ShootTurn(channel string, user *discordgo.User) string {
 	if !accepted {
 		return "Game still is not accepted"
 	}
+	if game.Table.GetCurrentPlayer().GetID() != user.ID {
+		return "It is not your turn"
+	}
 
-	shot, err := game.TakeTurn()
+	shot := game.TakeTurn()
 	db.UpdateGameDocument(channel, game)
 	if err != nil {
 		message = "Error: " + err.Error()
