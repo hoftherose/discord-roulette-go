@@ -39,6 +39,7 @@ func (s *GameStatus) TakeTurn() bool {
 	if shot {
 		seating := s.Table.GetSeating()
 		s.Table.SetSeating(append(seating[:currentTurn], seating[currentTurn+1:]...))
+		s.Table.SetCurrentTurn(currentTurn)
 	} else {
 		s.Table.SetCurrentTurn(currentTurn + 1)
 	}
