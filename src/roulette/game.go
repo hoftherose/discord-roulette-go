@@ -65,7 +65,6 @@ func GetGame(channel string) (data.GameStatus, error) {
 		Channel:      result["channel"].(string),
 	}
 	return game, encResult.Err()
-	// return result, encResult.Err()
 }
 
 func GetGameInfo(channel string) string {
