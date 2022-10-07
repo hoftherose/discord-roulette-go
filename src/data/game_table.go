@@ -77,7 +77,8 @@ func (t *GameTable) NumPlayers() int {
 }
 
 func (t *GameTable) GetCurrentPlayer() User {
-	return t.Seating[t.GetCurrentTurn()]
+	seating := t.GetSeating()
+	return seating[t.GetCurrentTurn()]
 }
 
 func (t *GameTable) GetSeating() []User {
@@ -93,7 +94,8 @@ func (t *GameTable) GetCurrentTurn() int {
 }
 
 func (t *GameTable) SetCurrentTurn(currentTurn int) {
-	t.CurrentTurn = currentTurn
+	tableSize := len(t.GetSeating())
+	t.CurrentTurn = currentTurn % tableSize
 }
 
 func (t *GameTable) GetSeed() int64 {
