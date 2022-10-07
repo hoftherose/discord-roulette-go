@@ -70,7 +70,19 @@ spec:
     type: string
     description: "the cloneURL that the change was detected in"
   tasks:
+  - name: check-changes
+    params:
+    - name: sha
+      value: $(params.sha)
+    - name: repoURL
+      value: $(params.repoURL)
+    taskRef:
+      name: check-changes
   - name: yaml-updater
+    when: 
+      - input: $(tasks.check-changes.results.changed)
+        operator: notin
+        values: ["Changes not found"]
     params:
     - name: sha
       value: $(params.sha)
@@ -78,6 +90,10 @@ spec:
       value: $(params.repoURL)
     taskRef:
       name: yaml-updater
+  results:
+    - name: changed
+      description: checks if changed
+      value: $(tasks.check-changes.results.changed)
 ---
 apiVersion: polling.tekton.dev/v1alpha1
 kind: Repository
