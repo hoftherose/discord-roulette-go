@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: update-image
+  namespace: repo-pipeline
+spec:
+  params:
+    - name: repoURL
+      type: string
+    - name: repoName
+      type: string
+      default: "discord-roulette"
+    - name: imageTag
+      type: string
+      default: "development"
+  steps:
+    - name: update-registry
+      image: docker
+      script: |
+        #!/bin/sh
+        cd usr
+        git clone $(params.repoURL) repo
+        cd repo
+        docker login
+        docker build -t $(params.repoName):$(params.development) -f Dockerfile .
