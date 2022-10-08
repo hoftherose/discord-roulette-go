@@ -1,0 +1,21 @@
+apiVersion: polling.tekton.dev/v1alpha1
+kind: Repository
+metadata:
+  name: github-listener
+  namespace: repo-pipeline
+  labels:
+    name: test
+spec:
+  url: https://github.com/holy-tech/discord-roulette.git
+  ref: main
+  frequency: 1m
+  type: github
+  pipelineRef:
+    serviceAccountName: kubectl-user
+    name: update-cicd
+    namespace: repo-pipeline
+    params:
+      - name: sha
+        expression: commit.sha
+      - name: repoURL
+        expression: repoURL
