@@ -4,9 +4,9 @@ metadata:
   name: kubectl-user
   namespace: repo-pipeline
 rules:
-- apiGroups: ["v1", "tekton.dev", "polling.tekton.dev", "rbac.authorization.k8s.io"]
+- apiGroups: ["", "v1", "tekton.dev", "polling.tekton.dev", "rbac.authorization.k8s.io"]
   resources: ["nodes", "pods", "tasks", "pipelines", "repositories", "clusterroles", "clusterrolebindings", "serviceaccounts", "namespaces"]
-  verbs: ["get", "watch", "list"]
+  verbs: ["get", "watch", "list", "patch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
