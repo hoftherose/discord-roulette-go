@@ -1,14 +1,7 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: repo-pipeline
-  labels:
-    env: test
----
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: check-for-changes
+  name: check-changes
   namespace: repo-pipeline
 spec:
   params:
@@ -20,20 +13,23 @@ spec:
     - name: changed
       description: Returns value only if changes were found
   steps:
-    - name: check-for-changes
+    - name: check-changes
       image: bitnami/kubectl
       script: |
         #!/bin/sh
         cd usr
         git clone $(params.repoURL) repo
         cd repo
-        git diff --no-commit-id --name-only -r $(params.sha) >> changes.txt
+        git diff --no-commit-id --name-only -r $(params.sha)^1 >> changes.txt
         egrep '^\.cicd' changes.txt
         if egrep -q '^\.cicd' changes.txt
         then
           echo -n "Changes found" >> $(results.changed.path)
+        else
+          echo -n "Changes not found" >> $(results.changed.path)
         fi
         echo $(results.changed.path)
+        cat $(results.changed.path)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
@@ -59,41 +55,37 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: get-nodes
+  name: update-cicd
   namespace: repo-pipeline
 spec:
   params:
-  - name: sha
-    type: string
-    description: "the SHA of the recently detected change"
-  - name: repoURL
-    type: string
-    description: "the cloneURL that the change was detected in"
+    - name: sha
+      type: string
+      description: "the SHA of the recently detected change"
+    - name: repoURL
+      type: string
+      description: "the cloneURL that the change was detected in"
   tasks:
-  - name: check-changes
-    params:
-    - name: sha
-      value: $(params.sha)
-    - name: repoURL
-      value: $(params.repoURL)
-    taskRef:
-      name: check-changes
-  - name: yaml-updater
-    when: 
-      - input: $(tasks.check-changes.results.changed)
-        operator: notin
-        values: ["Changes not found"]
-    params:
-    - name: sha
-      value: $(params.sha)
-    - name: repoURL
-      value: $(params.repoURL)
-    taskRef:
-      name: yaml-updater
-  results:
-    - name: changed
-      description: checks if changed
-      value: $(tasks.check-changes.results.changed)
+    - name: check-for-changes
+      params:
+        - name: sha
+          value: $(params.sha)
+        - name: repoURL
+          value: $(params.repoURL)
+      taskRef:
+        name: check-changes
+    - name: yaml-updater
+      params:
+        - name: sha
+          value: $(params.sha)
+        - name: repoURL
+          value: $(params.repoURL)
+      taskRef:
+        name: yaml-updater
+      when:
+        - input: $(tasks.check-for-changes.results.changed)
+          operator: notin
+          values: ["Changes not found"]
 ---
 apiVersion: polling.tekton.dev/v1alpha1
 kind: Repository
@@ -108,9 +100,11 @@ spec:
   frequency: 1m
   type: github
   pipelineRef:
-    name: get-nodes
+    serviceAccountName: kubectl-user
+    name: update-cicd
+    namespace: repo-pipeline
     params:
-    - name: sha
-      expression: commit.sha
-    - name: repo
-      expression: repoURL
+      - name: sha
+        expression: commit.sha
+      - name: repoURL
+        expression: repoURL

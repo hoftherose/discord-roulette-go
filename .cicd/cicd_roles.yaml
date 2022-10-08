@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: cluster-pod-reader
+  name: kubectl-user
   namespace: repo-pipeline
 rules:
 - apiGroups: [""]
@@ -14,15 +14,15 @@ metadata:
   name: read-secrets-global
 subjects:
 - kind: ServiceAccount
-  name: kubectl-users
+  name: kubectl-user
   namespace: repo-pipeline
 roleRef:
   kind: ClusterRole
-  name: cluster-pod-reader
+  name: kubectl-user
   apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: kubectl-users
+  name: kubectl-user
   namespace: repo-pipeline
