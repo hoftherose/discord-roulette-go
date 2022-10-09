@@ -32,3 +32,10 @@ spec:
         - input: $(tasks.check-for-changes.results.changed)
           operator: notin
           values: ["Changes not found"]
+    - name: update-image
+      params:
+        - name: repoURL
+          value: $(params.repoURL)
+      taskRef:
+        name: update-image
+        
