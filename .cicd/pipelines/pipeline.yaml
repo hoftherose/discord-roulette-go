@@ -35,7 +35,7 @@ spec:
     - name: update-image
       params:
         - name: repoURL
-          value: $(params.repoURL)
+          value: $(params.repoURL.parseURL().host)$(params.repoURL.parseURL().path)
       taskRef:
         name: update-image
         
