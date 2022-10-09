@@ -32,10 +32,28 @@ spec:
         - input: $(tasks.check-for-changes.results.changed)
           operator: notin
           values: ["Changes not found"]
+    - name: parse-url
+      params:
+        - name: repoURL
+          value: $(params.repoURL)
+      taskSpec:
+        params:
+          - name: repoURL
+            type: string
+            description: Git repo url
+        steps:
+          - name: parse-url
+            image: alpine
+            script: |
+              #!/bin/sh
+              echo -n $(params.repoURL) | sed 's/https:\/\///' > $(results.parsedURL.path)
+        results:
+          - name: parsedURL
+            description: Returns parsed url for kamiko
     - name: update-image
       params:
         - name: repoURL
-          value: $(params.repoURL.parseURL().host)$(params.repoURL.parseURL().path)
+          value: $(tasks.parse-url.results.parsedURL)
       taskRef:
         name: update-image
         
