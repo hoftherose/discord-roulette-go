@@ -14,12 +14,10 @@ spec:
       type: string
       default: "development"
   steps:
-    - name: update-registry
-      image: docker
-      script: |
-        #!/bin/sh
-        cd usr
-        git clone $(params.repoURL) repo
-        cd repo
-        docker login
-        docker build -t $(params.repoName):$(params.development) -f Dockerfile .
+    - name: build-image
+      image: gcr.io/kaniko-project/executor:v1.5.1@sha256:c6166717f7fe0b7da44908c986137ecfeab21f31ec3992f6e128fff8a94be8a5
+      args:
+        - "--context=git://$(params.repoURL)"
+        - "--git=branch=main"
+        - "--dockerfile=Dockerfile"
+        - "--destination=hoftherose/$(params.repoName):$(params.imageTag)"
