@@ -7,7 +7,7 @@ RUN go mod verify
 
 COPY . .
 
-RUN CGO_ENABLED=0 go build ./main.go
+RUN CGO_ENABLED=0 go build main.go
 
 FROM alpine:3.16.2
 

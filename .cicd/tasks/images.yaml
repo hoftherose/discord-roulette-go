@@ -1,0 +1,37 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: update-image
+  namespace: repo-pipeline
+spec:
+  params:
+    - name: repoURL
+      type: string
+    - name: branch
+      type: string
+      default: main
+    - name: repoName
+      type: string
+      default: "discord-roulette"
+    - name: imageTag
+      type: string
+      default: "development"
+  steps:
+    - name: build-image
+      image: gcr.io/kaniko-project/executor:v1.7.0
+      args:
+        - "--context=git://$(params.repoURL)"
+        - "--git=branch=$(params.branch)"
+        - "--dockerfile=Dockerfile"
+        - "--destination=hoftherose/$(params.repoName):$(params.imageTag)"
+        - "--ignore-path=/product_uuid"
+      volumeMounts:
+        - name: kaniko-secret
+          mountPath: /kaniko/.docker
+  volumes:
+    - name: kaniko-secret
+      secret:
+        secretName: docker-key
+        items:
+          - key: .dockerconfigjson
+            path: config.json

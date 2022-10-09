@@ -26,3 +26,5 @@ kind: ServiceAccount
 metadata:
   name: kubectl-user
   namespace: repo-pipeline
+secrets:
+  - name: docker-key
