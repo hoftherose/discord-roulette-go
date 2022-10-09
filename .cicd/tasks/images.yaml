@@ -7,6 +7,9 @@ spec:
   params:
     - name: repoURL
       type: string
+    - name: branch
+      type: string
+      default: main
     - name: repoName
       type: string
       default: "discord-roulette"
@@ -18,7 +21,7 @@ spec:
       image: gcr.io/kaniko-project/executor:v1.7.0
       args:
         - "--context=git://$(params.repoURL)"
-        - "--git=branch=main"
+        - "--git=branch=$(params.branch)"
         - "--dockerfile=Dockerfile"
         - "--destination=hoftherose/$(params.repoName):$(params.imageTag)"
         - "--ignore-path=/product_uuid"
