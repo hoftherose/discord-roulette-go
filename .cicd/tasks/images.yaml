@@ -21,6 +21,7 @@ spec:
         - "--git=branch=main"
         - "--dockerfile=Dockerfile"
         - "--destination=hoftherose/$(params.repoName):$(params.imageTag)"
+        - "--ignore-path=/product_uuid"
       volumeMounts:
         - name: kaniko-secret
           mountPath: /kaniko/.docker
