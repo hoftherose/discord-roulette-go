@@ -19,3 +19,12 @@ spec:
         expression: commit.sha
       - name: repoURL
         expression: repoURL
+    workspaces:
+    - name: repo
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
