@@ -4,6 +4,8 @@ metadata:
   name: update-cicd
   namespace: repo-pipeline
 spec:
+  workspaces:
+    - name: repo
   params:
     - name: sha
       type: string
@@ -20,6 +22,10 @@ spec:
           value: $(params.repoURL)
       taskRef:
         name: check-changes
+      workspaces:
+        - name: repo
+          workspace: repo
+
     - name: yaml-updater
       params:
         - name: sha
@@ -28,28 +34,21 @@ spec:
           value: $(params.repoURL)
       taskRef:
         name: yaml-updater
+      workspaces:
+        - name: repo
+          workspace: repo
       when:
         - input: $(tasks.check-for-changes.results.changed)
           operator: notin
           values: ["Changes not found"]
+
     - name: parse-url
       params:
         - name: repoURL
           value: $(params.repoURL)
-      taskSpec:
-        params:
-          - name: repoURL
-            type: string
-            description: Git repo url
-        steps:
-          - name: parse-url
-            image: alpine
-            script: |
-              #!/bin/sh
-              echo -n $(params.repoURL) | sed 's/https:\/\///' > $(results.parsedURL.path)
-        results:
-          - name: parsedURL
-            description: Returns parsed url for kamiko
+      taskRef:
+        name: parse-url
+
     - name: update-image
       params:
         - name: repoURL
