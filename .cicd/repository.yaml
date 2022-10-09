@@ -23,13 +23,13 @@ spec:
 apiVersion: polling.tekton.dev/v1alpha1
 kind: Repository
 metadata:
-  name: github-listener-2
+  name: docker-update-listener
   namespace: repo-pipeline
   labels:
     name: test
 spec:
   url: https://github.com/holy-tech/discord-roulette.git
-  ref: feat/cicd-tasks
+  ref: main
   frequency: 1m
   type: github
   pipelineRef:
