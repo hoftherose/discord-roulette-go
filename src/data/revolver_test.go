@@ -12,9 +12,9 @@ func TestReloadGun(t *testing.T) {
 		sizeChamber, numBullets int
 		expected                []bool
 	}{
-		{6, 1, []bool{true, false, false, false, false, false}},
-		{6, 4, []bool{true, true, true, true, false, false}},
-		{7, 2, []bool{true, true, false, false, false, false, false}},
+		{6, 1, []bool{false, false, false, false, true, false}},
+		{6, 4, []bool{true, true, false, false, true, true}},
+		{7, 2, []bool{true, false, false, false, false, true, false}},
 		{3, 3, []bool{true, true, true}},
 		{1, 0, []bool{false}},
 	}
@@ -23,6 +23,7 @@ func TestReloadGun(t *testing.T) {
 		testname := fmt.Sprintf("reload_%d_%d", tt.sizeChamber, tt.numBullets)
 		t.Run(testname, func(t *testing.T) {
 			r := data.DefaultRevolver
+			r.SetSeed(42)
 			r.ReloadGun(tt.sizeChamber, tt.numBullets)
 			chambers := r.GetChamber()
 			if len(chambers) != len(tt.expected) {
@@ -40,21 +41,20 @@ func TestReloadGun(t *testing.T) {
 func TestSpinChamber(t *testing.T) {
 	var tests = []struct {
 		sizeChamber, numBullets int
-		seed                    int64
 		expected                []bool
 	}{
-		{6, 1, 42, []bool{false, false, false, false, false, true}},
-		{6, 4, 42, []bool{true, true, true, false, false, true}},
-		{7, 2, 42, []bool{false, false, false, false, true, true, false}},
-		{3, 3, 42, []bool{true, true, true}},
-		{1, 0, 42, []bool{false}},
+		{6, 1, []bool{false, false, false, true, false, false}},
+		{6, 4, []bool{true, false, false, true, true, true}},
+		{7, 2, []bool{false, false, true, false, true, false, false}},
+		{3, 3, []bool{true, true, true}},
+		{1, 0, []bool{false}},
 	}
 
 	for _, tt := range tests {
 		testname := fmt.Sprintf("spin_%d_%d", tt.sizeChamber, tt.numBullets)
 		t.Run(testname, func(t *testing.T) {
 			r := data.DefaultRevolver
-			r.SetSeed(tt.seed)
+			r.SetSeed(42)
 			r.ReloadGun(tt.sizeChamber, tt.numBullets)
 			r.SpinChamber()
 			chambers := r.GetChamber()
@@ -73,21 +73,20 @@ func TestSpinChamber(t *testing.T) {
 func TestShuffleChamber(t *testing.T) {
 	var tests = []struct {
 		sizeChamber, numBullets int
-		seed                    int64
 		expected                []bool
 	}{
-		{6, 1, 42, []bool{false, false, false, false, true, false}},
-		{6, 4, 42, []bool{true, true, false, false, true, true}},
-		{7, 2, 42, []bool{true, false, false, false, false, true, false}},
-		{3, 3, 42, []bool{true, true, true}},
-		{1, 0, 42, []bool{false}},
+		{6, 1, []bool{false, false, true, false, false, false}},
+		{6, 4, []bool{true, false, true, true, true, false}},
+		{7, 2, []bool{false, false, false, true, false, true, false}},
+		{3, 3, []bool{true, true, true}},
+		{1, 0, []bool{false}},
 	}
 
 	for _, tt := range tests {
 		testname := fmt.Sprintf("shuffle_%d_%d", tt.sizeChamber, tt.numBullets)
 		t.Run(testname, func(t *testing.T) {
 			r := data.DefaultRevolver
-			r.SetSeed(tt.seed)
+			r.SetSeed(42)
 			r.ReloadGun(tt.sizeChamber, tt.numBullets)
 			r.ShuffleChamber()
 			chambers := r.GetChamber()
