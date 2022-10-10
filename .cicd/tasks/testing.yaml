@@ -4,15 +4,28 @@ metadata:
   name: testing
   namespace: repo-pipeline
 spec:
+  results:
+    - name: changed
+      description: Returns value only if changes were found
   steps:
-    - name: parse-url
+    - name: lint-test
       image: golang:1.19.0-buster
       script: |
         #!/bin/sh
         cd /usr/repo
-        go install github.com/golang/mock/mockgen@v1.6.0
         go mod download
         go mod verify
+        go vet
+
+        if [ $? -eq 0 ]; 
+        then 
+            echo "Linter passed" 
+        else 
+            echo "Linter failed"
+            exit 1 
+        fi
+        
+        go install github.com/golang/mock/mockgen@v1.6.0
         go generate ./...
         go test ./...
   workspaces:
