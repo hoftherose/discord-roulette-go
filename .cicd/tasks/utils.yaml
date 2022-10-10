@@ -10,7 +10,7 @@ spec:
       description: Git repo url
   steps:
     - name: pull-repo
-      image: alpine
+      image: bitnami/kubectl
       script: |
         #!/bin/sh
         cd /usr/repo
