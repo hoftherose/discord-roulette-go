@@ -11,3 +11,7 @@ spec:
         #!/bin/sh
         cd /usr/repo
         go test ./...
+  workspaces:
+    - name: repo
+      description: Git repo cloned here
+      mountPath: /usr/repo
