@@ -10,7 +10,10 @@ spec:
       script: |
         #!/bin/sh
         cd /usr/repo
-        ls -l
+        ls -la
+        go mod download
+        go mod verify
+        go generate ./...
         go test ./...
   workspaces:
     - name: repo
