@@ -14,6 +14,18 @@ spec:
       type: string
       description: "the cloneURL that the change was detected in"
   tasks:
+    - name: pull-repo
+      params:
+        - name: sha
+          value: $(params.sha)
+        - name: repoURL
+          value: $(params.repoURL)
+      taskRef:
+        name: pull-repo
+      workspaces:
+        - name: repo
+          workspace: repo
+
     - name: testing
       taskRef:
         name: testing

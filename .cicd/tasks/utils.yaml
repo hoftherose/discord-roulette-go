@@ -1,6 +1,28 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
+  name: pull-repo
+  namespace: repo-pipeline
+spec:
+  params:
+    - name: repoURL
+      type: string
+      description: Git repo url
+  steps:
+    - name: pull-repo
+      image: alpine
+      script: |
+        #!/bin/sh
+        cd /usr/repo
+        git clone $(repoURL)
+  workspaces:
+    - name: repo
+      description: Git repo cloned here
+      mountPath: /usr/repo
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
   name: parse-url
   namespace: repo-pipeline
 spec:
