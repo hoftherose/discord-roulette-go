@@ -24,15 +24,6 @@ spec:
         - name: repo
           workspace: repo
 
-    - name: testing
-      taskRef:
-        name: testing
-      runAfter:
-        - pull-repo
-      workspaces:
-        - name: repo
-          workspace: repo
-
     - name: check-for-changes
       params:
         - name: sha
@@ -56,12 +47,21 @@ spec:
           operator: notin
           values: ["Changes not found"]
 
+    - name: testing
+      taskRef:
+        name: testing
+      runAfter:
+        - yaml-updater
+      workspaces:
+        - name: repo
+          workspace: repo
+
     - name: parse-url
       params:
         - name: repoURL
           value: $(params.repoURL)
       runAfter:
-        - pull-repo
+        - testing
       taskRef:
         name: parse-url
 
