@@ -16,8 +16,6 @@ spec:
   tasks:
     - name: pull-repo
       params:
-        - name: sha
-          value: $(params.sha)
         - name: repoURL
           value: $(params.repoURL)
       taskRef:
