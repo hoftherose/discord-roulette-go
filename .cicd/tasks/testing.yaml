@@ -10,6 +10,7 @@ spec:
       script: |
         #!/bin/sh
         cd /usr/repo
+        ls -l
         go test ./...
   workspaces:
     - name: repo
