@@ -4,10 +4,6 @@ metadata:
   name: testing
   namespace: repo-pipeline
 spec:
-  params:
-    - name: repoURL
-      type: string
-      description: Git repo url
   steps:
     - name: parse-url
       image: golang:1.19.0-buster

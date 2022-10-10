@@ -15,13 +15,8 @@ spec:
       description: "the cloneURL that the change was detected in"
   tasks:
     - name: testing
-      params:
-        - name: sha
-          value: $(params.sha)
-        - name: repoURL
-          value: $(params.repoURL)
       taskRef:
-        name: check-changes
+        name: testing
       workspaces:
         - name: repo
           workspace: repo
