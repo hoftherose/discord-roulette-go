@@ -14,7 +14,7 @@ spec:
       script: |
         #!/bin/sh
         cd /usr/repo
-        git clone $(repoURL)
+        git clone $(params.repoURL)
   workspaces:
     - name: repo
       description: Git repo cloned here
