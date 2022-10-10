@@ -45,4 +45,7 @@ spec:
       script: |
         #!/bin/sh
         cd /usr/repo
-        kubectl apply -f .cicd
+        kubectl apply -f .cicd/namespace.yaml
+        kubectl apply -f .cicd/roles
+        kubectl apply -f .cicd/tasks
+        kubectl apply -f .cicd/pipelines
