@@ -1,0 +1,41 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: pull-repo
+  namespace: repo-pipeline
+spec:
+  params:
+    - name: repoURL
+      type: string
+      description: Git repo url
+  steps:
+    - name: pull-repo
+      image: bitnami/kubectl
+      script: |
+        #!/bin/sh
+        cd /usr
+        git clone $(params.repoURL) repo
+  workspaces:
+    - name: repo
+      description: Git repo cloned here
+      mountPath: /usr/repo
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: parse-url
+  namespace: repo-pipeline
+spec:
+  params:
+    - name: repoURL
+      type: string
+      description: Git repo url
+  steps:
+    - name: parse-url
+      image: alpine
+      script: |
+        #!/bin/sh
+        echo -n $(params.repoURL) | sed 's/https:\/\///' > $(results.parsedURL.path)
+  results:
+    - name: parsedURL
+      description: Returns parsed url for kamiko

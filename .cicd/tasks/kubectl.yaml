@@ -7,19 +7,19 @@ spec:
   params:
     - name: sha
       type: string
-    - name: repoURL
-      type: string
   results:
     - name: changed
       description: Returns value only if changes were found
+  workspaces:
+    - name: repo
+      description: Git repo cloned here
+      mountPath: /usr/repo
   steps:
     - name: check-changes
       image: bitnami/kubectl
       script: |
         #!/bin/sh
-        cd usr
-        git clone $(params.repoURL) repo
-        cd repo
+        cd /usr/repo
         git diff --no-commit-id --name-only -r $(params.sha)^1 >> changes.txt
         egrep '^\.cicd' changes.txt
         if egrep -q '^\.cicd' changes.txt
@@ -28,8 +28,6 @@ spec:
         else
           echo -n "Changes not found" >> $(results.changed.path)
         fi
-        echo $(results.changed.path)
-        cat $(results.changed.path)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
@@ -37,17 +35,17 @@ metadata:
   name: yaml-updater
   namespace: repo-pipeline
 spec:
-  params:
-    - name: sha
-      type: string
-    - name: repoURL
-      type: string
+  workspaces:
+    - name: repo
+      description: Git repo cloned here
+      mountPath: /usr/repo
   steps:
     - name: yaml-updater
       image: bitnami/kubectl
       script: |
         #!/bin/sh
-        cd usr
-        git clone $(params.repoURL) repo
-        cd repo
-        kubectl apply -f .cicd
+        cd /usr/repo
+        kubectl apply -f .cicd/namespace.yaml
+        kubectl apply -f .cicd/roles
+        kubectl apply -f .cicd/tasks
+        kubectl apply -f .cicd/pipelines
