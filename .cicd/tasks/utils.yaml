@@ -13,8 +13,8 @@ spec:
       image: bitnami/kubectl
       script: |
         #!/bin/sh
-        cd /usr/repo
-        git clone $(params.repoURL)
+        cd /usr
+        git clone $(params.repoURL) repo
   workspaces:
     - name: repo
       description: Git repo cloned here
