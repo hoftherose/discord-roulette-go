@@ -7,8 +7,6 @@ spec:
   params:
     - name: sha
       type: string
-    - name: repoURL
-      type: string
   results:
     - name: changed
       description: Returns value only if changes were found
@@ -37,11 +35,6 @@ metadata:
   name: yaml-updater
   namespace: repo-pipeline
 spec:
-  params:
-    - name: sha
-      type: string
-    - name: repoURL
-      type: string
   workspaces:
     - name: repo
       description: Git repo cloned here
